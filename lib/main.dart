@@ -39,7 +39,7 @@ class MyHomePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: Text(
-                  'H3LL0 PBP AO3',
+                  'H3LL0 PBP AO3! (development)',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
