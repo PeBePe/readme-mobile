@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/shop/models/shop_item.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
-class ShopItemCard extends StatelessWidget {
+class ShopItemCard extends StatefulWidget {
   final ShopItemElement shopItem;
 
   const ShopItemCard(this.shopItem, {super.key});
 
   @override
+  State<ShopItemCard> createState() => _ShopItemCardState();
+}
+
+class _ShopItemCardState extends State<ShopItemCard> {
+  @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -33,45 +41,61 @@ class ShopItemCard extends StatelessWidget {
                   SizedBox(
                     height: 220,
                     width: 150,
-                    child:
-                        Image.network(shopItem.book.imageUrl, fit: BoxFit.fill),
+                    child: Image.network(widget.shopItem.book.imageUrl,
+                        fit: BoxFit.fill),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "${shopItem.book.title} (${shopItem.book.publicationDate.year})",
+                    "${widget.shopItem.book.title} (${widget.shopItem.book.publicationDate.year})",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      // color: Colors.white,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF5A4100),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      '${shopItem.amount} Available',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
+              Flex(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF5A4100),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        '${widget.shopItem.amount} Available',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
-                  Text(
-                    '\$${shopItem.price}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      // color: Colors.white,
+                  Expanded(
+                    flex: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Icon(
+                          Icons.stars,
+                          color: Color(0xfffbbd61),
+                          size: 22,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${widget.shopItem.price}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -80,18 +104,40 @@ class ShopItemCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {
-                    // add your code here to handle the button press
-                  },
+                  onPressed: widget.shopItem.amount > 0
+                      ? () async {
+                          final response = await request.post(
+                            "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
+                            "",
+                          );
+                          String message = response['message'];
+                          if (response['status'] == true) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(message),
+                            ));
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(message),
+                            ));
+                          }
+                        }
+                      : null, // disable the button when the shop item amount is 0
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xfffbbd61),
+                    backgroundColor: widget.shopItem.amount > 0
+                        ? const Color(0xfffbbd61)
+                        : Colors.grey
+                            .shade600, // change the background color when the button is disabled
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(
+                  child: Text(
+                    widget.shopItem.amount > 0
+                        ? 'Add to Cart'
+                        : 'Out of Stock', // change the text when the button is disabled
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.white,
                     ),

@@ -4,7 +4,6 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:readme_mobile/readme/screens/login.dart';
-import 'package:readme_mobile/shop/screens/shopping_cart.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +32,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: isLoggedIn ? MyHomePage() : LoginPage(),
-        routes: {
-          '/cart': (context) => ShoppingCartPage(),
-        },
       ),
     );
   }

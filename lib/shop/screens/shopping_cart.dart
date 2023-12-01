@@ -35,14 +35,6 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
           ),
         ),
         backgroundColor: Colors.orange,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.pushNamed(context, '/cart');
-            },
-          ),
-        ],
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
@@ -53,31 +45,35 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
           } else {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              itemCount: (snapshot.data.length / 2)
-                  .ceil(), // calculate the number of rows
+              itemCount: (snapshot.data.length / 2).ceil(),
               itemBuilder: (context, index) {
                 int start = index * 2;
                 int end = start + 2;
                 if (end > snapshot.data.length) {
                   end = snapshot.data.length;
                 }
+                List items = snapshot.data.sublist(start, end);
                 return Column(
                   children: [
                     IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: snapshot.data
-                            .sublist(start, end)
-                            .map<Widget>((item) {
-                          return Flexible(
-                            fit: FlexFit.tight,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: CartItemCard(item),
-                            ),
-                          );
-                        }).toList(),
+                        children: [
+                          ...items.map<Widget>((item) {
+                            return Flexible(
+                              fit: FlexFit.tight,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: CartItemCard(item),
+                              ),
+                            );
+                          }).toList(),
+                          // If it's the last row and the total number of items is odd, add an empty widget
+                          if (index == snapshot.data.length ~/ 2 &&
+                              snapshot.data.length.isOdd)
+                            Flexible(child: Container()),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16.0), // add a gap between each row
