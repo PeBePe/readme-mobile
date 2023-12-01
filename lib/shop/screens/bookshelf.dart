@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class BookshelfPage extends StatefulWidget {
+  const BookshelfPage({super.key});
 
-  final List<MenuItem> menuItems = [
-    MenuItem("Shop", Icons.shopping_bag_outlined, Colors.orange),
-  ];
+  @override
+  State<BookshelfPage> createState() => _BookshelfPageState();
+}
+
+class _BookshelfPageState extends State<BookshelfPage> {
+  // Fetch data from API here
 
   @override
   Widget build(BuildContext context) {
+    // final request = context.watch<CookieRequest>();
     return Scaffold(
+      backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
         title: const Text(
-          'ReadMe',
+          'Bookshelf',
         ),
         backgroundColor: const Color(0xFFFAEFDF),
         foregroundColor: const Color(0xFF1E1915),
         centerTitle: true,
       ),
-      drawer: const LeftDrawer(),
       body: const Center(
         child: Text(
-          'Welcome to ReadMe!',
+          'Under Construction',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -31,12 +34,4 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
-}
-
-class MenuItem {
-  final String name;
-  final IconData icon;
-  final Color color;
-
-  MenuItem(this.name, this.icon, this.color);
 }

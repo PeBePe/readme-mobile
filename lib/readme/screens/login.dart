@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(
             fontSize: 30.0,
             fontWeight: FontWeight.bold,
-            color: Colors.teal,
+            color: Color(0xFF1E1915),
           ),
         ),
         centerTitle: true,
@@ -125,8 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
+                backgroundColor: const Color(0xFF1E1915),
+                foregroundColor: const Color(0xFFFAEFDF),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: const Text(
                 'Don\'t have an account? Register',
-                style: TextStyle(color: Colors.teal),
+                style: TextStyle(color: Color(0xFF1E1915)),
               ),
             ),
           ],

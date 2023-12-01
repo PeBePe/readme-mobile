@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:readme_mobile/shop/models/cart_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -29,14 +28,13 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Shopping Cart',
-          ),
+        title: const Text(
+          'Shopping Cart',
         ),
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color(0xFFFAEFDF),
+        foregroundColor: const Color(0xFF1E1915),
+        centerTitle: true,
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchItem(request),
         builder: (context, AsyncSnapshot snapshot) {

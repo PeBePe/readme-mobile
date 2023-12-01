@@ -30,17 +30,16 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Shop',
-          ),
+        title: const Text(
+          'Shop',
         ),
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFAEFDF),
+        foregroundColor: const Color(0xFF1E1915),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            color: Colors.white,
+            icon: const Icon(Icons.shopping_cart_outlined),
+            color: const Color(0xFF1E1915),
             onPressed: () {
               Navigator.push(
                 context,
