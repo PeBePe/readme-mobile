@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/screens/menu.dart';
+import 'package:readme_mobile/screens/quotes_form.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -40,6 +41,17 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.ad_units_rounded),
+            title: const Text('Quotes'),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuotesFormPage(),
                   ));
             },
           ),
