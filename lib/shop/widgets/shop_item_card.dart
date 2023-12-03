@@ -111,17 +111,12 @@ class _ShopItemCardState extends State<ShopItemCard> {
                             "",
                           );
                           String message = response['message'];
-                          if (response['status'] == true) {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
                               content: Text(message),
                             ));
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(message),
-                            ));
-                          }
                         }
                       : null, // disable the button when the shop item amount is 0
                   style: TextButton.styleFrom(

@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/shop/models/cart_item.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class CartItemCard extends StatelessWidget {
+class CartItemCard extends StatefulWidget {
   final CartItem cartItem;
+  final Function(CartItem) onDelete;
+  final ValueNotifier<int> total;
 
-  const CartItemCard(this.cartItem, {super.key});
+  const CartItemCard({
+    required this.cartItem,
+    required this.onDelete,
+    required this.total,
+    Key? key,
+  }) : super(key: key);
 
   @override
+  State<CartItemCard> createState() => _CartItemCardState();
+}
+
+class _CartItemCardState extends State<CartItemCard> {
+  @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -33,12 +50,12 @@ class CartItemCard extends StatelessWidget {
                   SizedBox(
                     height: 220,
                     width: 150,
-                    child: Image.network(cartItem.item.book.imageUrl,
+                    child: Image.network(widget.cartItem.item.book.imageUrl,
                         fit: BoxFit.fill),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "${cartItem.item.book.title} (${cartItem.item.book.publicationDate.year})",
+                    "${widget.cartItem.item.book.title} (${widget.cartItem.item.book.publicationDate.year})",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 14,
@@ -60,7 +77,7 @@ class CartItemCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '${cartItem.item.price}',
+                    '${widget.cartItem.item.price * widget.cartItem.amount}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -96,7 +113,8 @@ class CartItemCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                // Add your onPressed code here
+                                decrementCartItem(
+                                    widget.cartItem.id.toString(), request);
                               },
                             ),
                           ),
@@ -109,7 +127,7 @@ class CartItemCard extends StatelessWidget {
                             height: 40,
                             child: Center(
                               child: Text(
-                                '${cartItem.amount}',
+                                '${widget.cartItem.amount}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -138,7 +156,8 @@ class CartItemCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                // Add your onPressed code here
+                                incrementCartItem(
+                                    widget.cartItem.id.toString(), request);
                               },
                             ),
                           ),
@@ -150,7 +169,9 @@ class CartItemCard extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: TextButton(
-                      onPressed: () => {},
+                      onPressed: () {
+                        deleteCartItem(widget.cartItem, request);
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
@@ -171,5 +192,66 @@ class CartItemCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> incrementCartItem(
+      String cartItemId, CookieRequest request) async {
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/shop/cart/increment-cart-item/$cartItemId');
+    var response = await http.put(url, headers: request.headers);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == true) {
+      setState(() {
+        widget.cartItem.amount += 1;
+        widget.total.value += widget.cartItem.item.price;
+      });
+    } else {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(
+          content: Text("Not enough stock!"),
+        ));
+    }
+  }
+
+  Future<void> decrementCartItem(
+      String cartItemId, CookieRequest request) async {
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/shop/cart/decrement-cart-item/$cartItemId');
+    var response = await http.put(url, headers: request.headers);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == true) {
+      setState(() {
+        if (widget.cartItem.amount > 0) {
+          widget.cartItem.amount -= 1;
+          widget.total.value -= widget.cartItem.item.price;
+        }
+      });
+    } else {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(
+          content: Text("Not enough stock!"),
+        ));
+    }
+  }
+
+  Future<void> deleteCartItem(CartItem cartItem, CookieRequest request) async {
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/shop/cart/remove-from-cart/${cartItem.id}');
+    var response = await http.delete(url, headers: request.headers);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == true) {
+      widget.onDelete(cartItem);
+    }
+    String message = responseData['message'];
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(message),
+      ));
   }
 }

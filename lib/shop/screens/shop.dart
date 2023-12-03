@@ -14,8 +14,15 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  String _searchTerm = '';
+  String _priceRange = '';
+
   Future<List<ShopItemElement>> fetchItem(request) async {
-    var data = await request.get('http://10.0.2.2:8000/api/shop');
+    var url = Uri.http('10.0.2.2:8000', '/api/shop', {
+      'q': _searchTerm,
+      'pricerange': _priceRange,
+    });
+    var data = await request.get(url.toString());
 
     List<ShopItemElement> items = [];
     for (var i = 0; i < data['shop_items'].length; i++) {
@@ -30,23 +37,82 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
-        title: const Text(
-          'Shop',
+        title: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          child: SizedBox(
+            height: 36.0,
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  _searchTerm = value;
+                });
+              },
+              decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.search),
+                hintText: 'Search',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(left: 10),
+              ),
+            ),
+          ),
         ),
         backgroundColor: const Color(0xFFFAEFDF),
         foregroundColor: const Color(0xFF1E1915),
-        centerTitle: true,
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            color: const Color(0xFF1E1915),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ShoppingCartPage()),
-              );
-            },
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              hint: const Text(
+                "All price", // placeholder text
+                style: TextStyle(
+                    color: Color(0xFF1E1915)), // style for the hint text
+              ),
+              value: _priceRange.isEmpty
+                  ? null
+                  : _priceRange, // if _priceRange is empty, set value to null
+              onChanged: (String? newValue) {
+                setState(() {
+                  _priceRange = newValue ?? '';
+                });
+              },
+              items: <String>['', '0-399', '400-699', '700-999', '1000+']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value.isEmpty
+                        ? "All price"
+                        : value, // if value is empty, display "All price"
+                    style: const TextStyle(
+                        color:
+                            Color(0xFF1E1915)), // style for the dropdown items
+                  ),
+                );
+              }).toList(),
+              dropdownColor:
+                  Colors.white, // background color of the dropdown items
+              icon: const Icon(
+                Icons.arrow_drop_down, // icon for the dropdown button
+                color: Color(0xFF1E1915), // color of the icon
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: const Icon(Icons.shopping_cart_outlined),
+              iconSize: 30.0,
+              color: const Color(0xFF1E1915),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ShoppingCartPage()),
+                );
+              },
+            ),
           ),
         ],
       ),

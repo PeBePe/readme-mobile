@@ -12,13 +12,20 @@ class ShoppingCartPage extends StatefulWidget {
 }
 
 class _ShoppingCartPageState extends State<ShoppingCartPage> {
+  ValueNotifier<int> total = ValueNotifier<int>(0);
+
   Future<List<CartItem>> fetchItem(request) async {
     var data = await request.get('http://10.0.2.2:8000/api/shop/cart');
 
     List<CartItem> items = [];
+    int newTotal = 0;
     for (var i = 0; i < data['cart_items'].length; i++) {
       items.add(CartItem.fromJson(data['cart_items'][i]));
+      newTotal += items[i].item.price * items[i].amount;
     }
+
+    total.value = newTotal;
+
     return items;
   }
 
@@ -63,7 +70,15 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: CartItemCard(item),
+                                child: CartItemCard(
+                                  cartItem: item,
+                                  total: total,
+                                  onDelete: (item) {
+                                    setState(() {
+                                      items.remove(item);
+                                    });
+                                  },
+                                ),
                               ),
                             );
                           }).toList(),
@@ -81,6 +96,73 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
             );
           }
         },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            ValueListenableBuilder<int>(
+              valueListenable: total,
+              builder: (context, value, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      'Total price: ',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.stars,
+                      color: Color(0xfffbbd61),
+                      size: 28,
+                    ),
+                    const SizedBox(width: 2),
+                    Text(
+                      value.toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            const Spacer(),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xfffbbd61), // background color
+                foregroundColor: Colors.white, // text color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () async {
+                final response = await request.post(
+                  "http://10.0.2.2:8000/api/shop/cart/checkout",
+                  "",
+                );
+                String message = response['message'];
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    content: Text(message),
+                  ));
+                if (response['status']) {
+                  setState(() {}); // rebuild the widget
+                }
+              },
+              child: const Text(
+                'Checkout',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
