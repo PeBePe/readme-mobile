@@ -197,7 +197,7 @@ class _CartItemCardState extends State<CartItemCard> {
   Future<void> incrementCartItem(
       String cartItemId, CookieRequest request) async {
     var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/increment-cart-item/$cartItemId');
+        'https://readme.up.railway.app/api/shop/cart/increment-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -218,7 +218,7 @@ class _CartItemCardState extends State<CartItemCard> {
   Future<void> decrementCartItem(
       String cartItemId, CookieRequest request) async {
     var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/decrement-cart-item/$cartItemId');
+        'https://readme.up.railway.app/api/shop/cart/decrement-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -240,7 +240,7 @@ class _CartItemCardState extends State<CartItemCard> {
 
   Future<void> deleteCartItem(CartItem cartItem, CookieRequest request) async {
     var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/remove-from-cart/${cartItem.id}');
+        'https://readme.up.railway.app/api/shop/cart/remove-from-cart/${cartItem.id}');
     var response = await http.delete(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {

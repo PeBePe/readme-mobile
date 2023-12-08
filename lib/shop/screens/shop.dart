@@ -18,7 +18,7 @@ class _ShopPageState extends State<ShopPage> {
   String _priceRange = '';
 
   Future<List<ShopItemElement>> fetchItem(request) async {
-    var url = Uri.http('10.0.2.2:8000', '/api/shop', {
+    var url = Uri.https('readme.up.railway.app', '/api/shop', {
       'q': _searchTerm,
       'pricerange': _priceRange,
     });
