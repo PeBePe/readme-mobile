@@ -9,6 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  // bool isLoggedIn = true;
 
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
@@ -28,10 +29,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'PBP A03',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-          useMaterial3: true,
-        ),
-        home: isLoggedIn ? MyHomePage() : LoginPage(),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+            useMaterial3: true,
+            fontFamily: 'Lato'),
+        home: isLoggedIn ? const MyHomePage() : const LoginPage(),
       ),
     );
   }
