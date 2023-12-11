@@ -4,6 +4,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:readme_mobile/shop/screens/shop_item_detail.dart';
 
 class CartItemCard extends StatefulWidget {
   final CartItem cartItem;
@@ -45,25 +46,36 @@ class _CartItemCardState extends State<CartItemCard> {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: 220,
-                    width: 150,
-                    child: Image.network(widget.cartItem.item.book.imageUrl,
-                        fit: BoxFit.fill),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "${widget.cartItem.item.book.title} (${widget.cartItem.item.book.publicationDate.year})",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      // color: Colors.white,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ShopItemDetailPage(shopItem: widget.cartItem.item),
                     ),
-                  ),
-                ],
+                  );
+                },
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 220,
+                      width: 150,
+                      child: Image.network(widget.cartItem.item.book.imageUrl,
+                          fit: BoxFit.fill),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "${widget.cartItem.item.book.title} (${widget.cartItem.item.book.publicationDate.year})",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        // color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 8),
               const Spacer(),
@@ -197,7 +209,7 @@ class _CartItemCardState extends State<CartItemCard> {
   Future<void> incrementCartItem(
       String cartItemId, CookieRequest request) async {
     var url = Uri.parse(
-        'https://readme.up.railway.app/api/shop/cart/increment-cart-item/$cartItemId');
+        'http://10.0.2.2:8000/api/shop/cart/increment-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -218,7 +230,7 @@ class _CartItemCardState extends State<CartItemCard> {
   Future<void> decrementCartItem(
       String cartItemId, CookieRequest request) async {
     var url = Uri.parse(
-        'https://readme.up.railway.app/api/shop/cart/decrement-cart-item/$cartItemId');
+        'http://10.0.2.2:8000/api/shop/cart/decrement-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -240,7 +252,7 @@ class _CartItemCardState extends State<CartItemCard> {
 
   Future<void> deleteCartItem(CartItem cartItem, CookieRequest request) async {
     var url = Uri.parse(
-        'https://readme.up.railway.app/api/shop/cart/remove-from-cart/${cartItem.id}');
+        'http://10.0.2.2:8000/api/shop/cart/remove-from-cart/${cartItem.id}');
     var response = await http.delete(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {

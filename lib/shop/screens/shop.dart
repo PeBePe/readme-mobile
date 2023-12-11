@@ -18,7 +18,7 @@ class _ShopPageState extends State<ShopPage> {
   String _priceRange = '';
 
   Future<List<ShopItemElement>> fetchItem(request) async {
-    var url = Uri.https('readme.up.railway.app', '/api/shop', {
+    var url = Uri.http('10.0.2.2:8000', '/api/shop', {
       'q': _searchTerm,
       'pricerange': _priceRange,
     });
@@ -74,13 +74,17 @@ class _ShopPageState extends State<ShopPage> {
                   : _priceRange, // if _priceRange is empty, set value to null
               onChanged: (String? newValue) {
                 setState(() {
-                  _priceRange = newValue ?? '';
+                  if (newValue == '1000+') {
+                    _priceRange = '1000-10000000';
+                  } else {
+                    _priceRange = newValue ?? '';
+                  }
                 });
               },
               items: <String>['', '0-399', '400-699', '700-999', '1000+']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
-                  value: value,
+                  value: value == '1000+' ? '1000-10000000' : value,
                   child: Text(
                     value.isEmpty
                         ? "All price"

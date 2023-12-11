@@ -20,7 +20,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
 
   Future<ShopItemElement> fetchItem(request) async {
     var data = await request
-        .get("https://readme.up.railway.app/api/shop/${widget.shopItem.id}");
+        .get("http://10.0.2.2:8000/api/shop/${widget.shopItem.id}");
 
     return ShopItemElement.fromJson(data["shop_item"]);
   }
@@ -82,7 +82,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                           onPressed: widget.shopItem.amount > 0
                               ? () async {
                                   final response = await request.post(
-                                    "https://readme.up.railway.app/api/shop/add-to-cart/${widget.shopItem.id}",
+                                    "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
                                     {"amount": _amountToAdd.toString()},
                                   );
                                   String message = response['message'];

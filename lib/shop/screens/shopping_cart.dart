@@ -15,7 +15,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
   ValueNotifier<int> total = ValueNotifier<int>(0);
 
   Future<List<CartItem>> fetchItem(request) async {
-    var data = await request.get('https://readme.up.railway.app/api/shop/cart');
+    var data = await request.get('http://10.0.2.2:8000/api/shop/cart');
 
     List<CartItem> items = [];
     int newTotal = 0;
@@ -142,7 +142,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               ),
               onPressed: () async {
                 final response = await request.post(
-                  "https://readme.up.railway.app/api/shop/cart/checkout",
+                  "http://10.0.2.2:8000/api/shop/cart/checkout",
                   "",
                 );
                 String message = response['message'];

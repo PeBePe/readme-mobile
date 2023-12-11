@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   return;
                 }
                 final response = await request.post(
-                  "https://readme.up.railway.app/api/auth/register/",
+                  "http://10.0.2.2/api/auth/register/",
                   {
                     'username': username,
                     'password': password,

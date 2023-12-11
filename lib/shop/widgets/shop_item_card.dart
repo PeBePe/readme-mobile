@@ -119,7 +119,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                   onPressed: widget.shopItem.amount > 0
                       ? () async {
                           final response = await request.post(
-                            "https://readme.up.railway.app/api/shop/add-to-cart/${widget.shopItem.id}",
+                            "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
                             "",
                           );
                           String message = response['message'];
