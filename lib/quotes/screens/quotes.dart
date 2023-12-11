@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
-import 'package:readme_mobile/quotes/widgets/quotes_card.dart'; // Pastikan ini adalah path yang benar
+import 'package:readme_mobile/quotes/screens/quotes_form.dart';
+import 'package:readme_mobile/quotes/widgets/quotes_card.dart'; 
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,35 +22,32 @@ class _QuotesPageState extends State<QuotesPage> {
   @override
   void initState() {
     super.initState();
-    // Isi dummyQuotes dengan data contoh
-    dummyQuotes = [
-      Product(
-        model: 'Model 1',
-        pk: 1,
-        fields: Fields(
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          quote: 'This is a sample quote 1',
-          user: 1,
-          username: 'user 1',
-          //user: 1,
-        ),
-      ),
-      // Tambahkan item lain jika perlu
-      Product(
-        model: 'Model 1',
-        pk: 1,
-        fields: Fields(
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          quote: 'This is a sample quote 2',
-          user: 1,
-          username: "user 2",
-          //user: 1,
-        ),
-      ),
-    ];
+    dummyQuotes = []; // List ini sekarang kosong dan siap untuk diisi dengan data baru
   }
+
+  Future<void> _navigateAndAddQuote() async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+  );
+
+  if (result != null) {
+    setState(() {
+      // Tambahkan data baru ke list
+      dummyQuotes.add(Product(
+        model: 'Model Baru', // Sesuaikan sesuai kebutuhan
+        pk: dummyQuotes.length + 1, // Atau gunakan cara yang lebih baik untuk mengatur primary key
+        fields: Fields(
+          createdAt: result['date'],
+          updatedAt: result['date'],
+          quote: result['quote'],
+          user: 1, // Sesuaikan dengan logika user Anda
+          username: result['username'],
+        ),
+      ));
+    });
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +62,6 @@ class _QuotesPageState extends State<QuotesPage> {
       drawer: const LeftDrawer(),
       body: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: Text(
-          //     'Some Quotes to Cheer Up $username\'s Day 🥂',
-          //     style: const TextStyle(
-          //       fontSize: 24,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // ),
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -88,6 +75,35 @@ class _QuotesPageState extends State<QuotesPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Navigator.push untuk membuka QuotesFormPage
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+          );
+
+          // Setelah QuotesFormPage ditutup, Anda dapat menangani hasil yang dikirim kembali di sini
+          if (result != null) {
+            setState(() {
+              // Tambahkan data baru ke list
+              dummyQuotes.add(Product(
+                model: 'Model Baru',
+                pk: dummyQuotes.length + 1,
+                fields: Fields(
+                  createdAt: result['date'],
+                  updatedAt: result['date'],
+                  quote: result['quote'],
+                  user: 1, // Sesuaikan dengan logika user Anda
+                  username: result['username'],
+                ),
+              ));
+            });
+          }
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFFFAEFDF),
       ),
     );
   }

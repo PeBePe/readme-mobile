@@ -11,9 +11,10 @@ class QuoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Fields fields = quote.fields;
 
-    return Card(
+    return Card( //#FAEFDF
       elevation: 4.0, // Menambahkan sedikit bayangan untuk efek kedalaman
-      margin: const EdgeInsets.all(8.0), // Margin di sekeliling card
+      margin: const EdgeInsets.all(5.0), // Margin di sekeliling card
+      color: Color.fromARGB(255, 253, 233, 204),
       child: Padding(
         padding: const EdgeInsets.all(16.0), // Padding di dalam card
         child: Column(
