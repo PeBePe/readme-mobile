@@ -60,58 +60,59 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                       child: SizedBox(
                         height: 40,
                         width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Amount',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              _amountToAdd = int.parse(value);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextButton(
-                          onPressed: widget.shopItem.amount > 0
-                              ? () async {
-                                  final response = await request.post(
-                                    "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
-                                    {"amount": _amountToAdd.toString()},
-                                  );
-                                  String message = response['message'];
-                                  // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context)
-                                    ..hideCurrentSnackBar()
-                                    ..showSnackBar(SnackBar(
-                                      content: Text(message),
-                                    ));
-                                }
-                              : null, // disable the button when the shop item amount is 0
-                          style: TextButton.styleFrom(
-                            backgroundColor: widget.shopItem.amount > 0
-                                ? const Color(0xfffbbd61)
-                                : Colors.grey
-                                    .shade600, // change the background color when the button is disabled
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Amount',
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _amountToAdd = int.parse(value);
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            widget.shopItem.amount > 0
-                                ? 'Add to Cart'
-                                : 'Out of Stock', // change the text when the button is disabled
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              width: 50,
+                              child: TextButton(
+                                onPressed: widget.shopItem.amount > 0
+                                    ? () async {
+                                        final response = await request.post(
+                                          "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
+                                          {"amount": _amountToAdd.toString()},
+                                        );
+                                        String message = response['message'];
+
+                                        if (!context.mounted) return;
+                                        ScaffoldMessenger.of(context)
+                                          ..hideCurrentSnackBar()
+                                          ..showSnackBar(SnackBar(
+                                            content: Text(message),
+                                          ));
+                                      }
+                                    : null, // disable the button when the shop item amount is 0
+                                style: TextButton.styleFrom(
+                                  backgroundColor: widget.shopItem.amount > 0
+                                      ? const Color(0xfffbbd61)
+                                      : Colors.grey
+                                          .shade600, // change the background color when the button is disabled
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons
+                                      .add_shopping_cart, // Replace text with shopping cart icon
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ),
@@ -180,46 +181,105 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                     ),
                     const SizedBox(height: 8),
                     const Divider(color: Colors.grey),
-                    GridView.count(
+                    ListView(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      childAspectRatio: 6,
                       children: [
-                        Text("ISBN",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(snapshot.data.book.isbn),
-                        Text("Penulis",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(snapshot.data.book.author),
-                        Text("Penerbit",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(snapshot.data.book.publisher),
-                        Text("Tanggal Terbit",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(
-                          "${snapshot.data.book.publicationDate.year}-${snapshot.data.book.publicationDate.month}-${snapshot.data.book.publicationDate.day}",
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("ISBN",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(snapshot.data.book.isbn),
+                            ),
+                          ],
                         ),
-                        Text("Jumlah Halaman",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(snapshot.data.book.pageCount.toString()),
-                        Text("Bahasa",
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.7))),
-                        Text(
-                          snapshot.data.book.lang.toString() == 'Lang.EN'
-                              ? 'Inggris'
-                              : snapshot.data.book.lang.toString() == 'Lang.ID'
-                                  ? 'Indonesia'
-                                  : 'Bahasa Lain',
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Penulis",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(snapshot.data.book.author),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Penerbit",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(snapshot.data.book.publisher),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Tanggal Terbit",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${snapshot.data.book.publicationDate.year}-${snapshot.data.book.publicationDate.month}-${snapshot.data.book.publicationDate.day}",
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Jumlah Halaman",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child:
+                                  Text(snapshot.data.book.pageCount.toString()),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Bahasa",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(
+                                snapshot.data.book.lang.toString() == 'Lang.EN'
+                                    ? 'Inggris'
+                                    : snapshot.data.book.lang.toString() ==
+                                            'Lang.ID'
+                                        ? 'Indonesia'
+                                        : 'Bahasa Lain',
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),

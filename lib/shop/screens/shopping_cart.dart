@@ -47,6 +47,14 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.data.isEmpty) {
+            return const Center(
+              child: Text(
+                'Your cart is empty. Add books from the shop!',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            );
           } else {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
