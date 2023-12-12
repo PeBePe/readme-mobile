@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readme_mobile/shop/models/shop_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:readme_mobile/shop/screens/shop_item_detail.dart';
 
 class ShopItemCard extends StatefulWidget {
   final ShopItemElement shopItem;
@@ -36,24 +37,37 @@ class _ShopItemCardState extends State<ShopItemCard> {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: 220,
-                    width: 150,
-                    child: Image.network(widget.shopItem.book.imageUrl,
-                        fit: BoxFit.fill),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "${widget.shopItem.book.title} (${widget.shopItem.book.publicationDate.year})",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShopItemDetailPage(
+                        shopItem: widget.shopItem,
+                        openedFromCart: false,
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                },
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 220,
+                      width: 150,
+                      child: Image.network(widget.shopItem.book.imageUrl,
+                          fit: BoxFit.fill),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "${widget.shopItem.book.title} (${widget.shopItem.book.publicationDate.year})",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 8),
               const Spacer(),
@@ -111,17 +125,12 @@ class _ShopItemCardState extends State<ShopItemCard> {
                             "",
                           );
                           String message = response['message'];
-                          if (response['status'] == true) {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
                               content: Text(message),
                             ));
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(message),
-                            ));
-                          }
                         }
                       : null, // disable the button when the shop item amount is 0
                   style: TextButton.styleFrom(

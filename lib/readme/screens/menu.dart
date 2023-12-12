@@ -16,7 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<HomeResponse> fetchHome() async {
-    var url = Uri.parse('http://localhost:8000/api/home');
+    var url = Uri.parse('http://10.0.2.2:8000/api/home');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
