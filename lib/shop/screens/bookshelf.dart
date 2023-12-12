@@ -12,7 +12,6 @@ class BookshelfPage extends StatefulWidget {
 }
 
 class _BookshelfPageState extends State<BookshelfPage> {
-  // Fetch data from API here
   Future<List<BookshelfItemElement>> fetchItem(request) async {
     var data = await request.get("http://10.0.2.2:8000/api/shop/bookshelf");
 

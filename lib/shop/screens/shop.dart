@@ -16,6 +16,7 @@ class ShopPage extends StatefulWidget {
 class _ShopPageState extends State<ShopPage> {
   String _searchTerm = '';
   String _priceRange = '';
+  ValueNotifier<int> loyaltyPoints = ValueNotifier<int>(0);
 
   Future<List<ShopItemElement>> fetchItem(request) async {
     var url = Uri.http('10.0.2.2:8000', '/api/shop', {
@@ -31,76 +32,120 @@ class _ShopPageState extends State<ShopPage> {
     return items;
   }
 
+  Future<int> fetchProfile(request) async {
+    var url = Uri.http('10.0.2.2:8000', '/api/profile');
+    var data = await request.get(url.toString());
+    if (data['status']) {
+      loyaltyPoints.value = data['user']['loyalty_point'];
+      return loyaltyPoints.value;
+    } else {
+      throw Exception('Failed to load profile');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
-        title: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-          ),
-          child: SizedBox(
-            height: 36.0,
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  _searchTerm = value;
-                });
-              },
-              decoration: const InputDecoration(
-                suffixIcon: Icon(Icons.search),
-                hintText: 'Search',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(left: 10),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // center the widgets
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: SizedBox(
+                  height: 38.0,
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        _searchTerm = value;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      suffixIcon: Icon(Icons.search),
+                      hintText: 'Search',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 10),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            IconButton(
+              icon: const Icon(Icons.tune, color: Color(0xFF1E1915)),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: const Text('Filter by price range'),
+                      children: <String>[
+                        '',
+                        '0-399',
+                        '400-699',
+                        '700-999',
+                        '1000+'
+                      ].map((String value) {
+                        return SimpleDialogOption(
+                          onPressed: () {
+                            setState(() {
+                              if (value == '1000+') {
+                                _priceRange = '1000-10000000';
+                              } else {
+                                _priceRange = value;
+                              }
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            value.isEmpty ? "All price" : value,
+                            style: const TextStyle(color: Color(0xFF1E1915)),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
         backgroundColor: const Color(0xFFFAEFDF),
         foregroundColor: const Color(0xFF1E1915),
         actions: <Widget>[
-          DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              hint: const Text(
-                "All price", // placeholder text
-                style: TextStyle(
-                    color: Color(0xFF1E1915)), // style for the hint text
-              ),
-              value: _priceRange.isEmpty
-                  ? null
-                  : _priceRange, // if _priceRange is empty, set value to null
-              onChanged: (String? newValue) {
-                setState(() {
-                  if (newValue == '1000+') {
-                    _priceRange = '1000-10000000';
-                  } else {
-                    _priceRange = newValue ?? '';
-                  }
-                });
-              },
-              items: <String>['', '0-399', '400-699', '700-999', '1000+']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value == '1000+' ? '1000-10000000' : value,
-                  child: Text(
-                    value.isEmpty
-                        ? "All price"
-                        : value, // if value is empty, display "All price"
-                    style: const TextStyle(
-                        color:
-                            Color(0xFF1E1915)), // style for the dropdown items
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(right: 0),
+            child: FutureBuilder(
+              future: fetchProfile(request),
+              builder: (context, AsyncSnapshot snapshot) {
+                return Row(
+                  children: <Widget>[
+                    const Icon(
+                      Icons.stars,
+                      color: Color(0xfffbbd61),
+                      size: 28,
+                    ),
+                    const SizedBox(width: 2),
+                    ValueListenableBuilder<int>(
+                      valueListenable: loyaltyPoints,
+                      builder: (context, value, child) {
+                        return Text(
+                          '$value',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 );
-              }).toList(),
-              dropdownColor:
-                  Colors.white, // background color of the dropdown items
-              icon: const Icon(
-                Icons.arrow_drop_down, // icon for the dropdown button
-                color: Color(0xFF1E1915), // color of the icon
-              ),
+              },
             ),
           ),
           Padding(
@@ -113,7 +158,7 @@ class _ShopPageState extends State<ShopPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ShoppingCartPage()),
+                      builder: (context) => ShoppingCartPage(loyaltyPoints)),
                 );
               },
             ),

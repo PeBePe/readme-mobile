@@ -30,9 +30,9 @@ class _CartItemCardState extends State<CartItemCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 3,
             offset: Offset(0, 3), // changes position of shadow
@@ -51,8 +51,10 @@ class _CartItemCardState extends State<CartItemCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ShopItemDetailPage(shopItem: widget.cartItem.item),
+                      builder: (context) => ShopItemDetailPage(
+                        shopItem: widget.cartItem.item,
+                        openedFromCart: true,
+                      ),
                     ),
                   );
                 },

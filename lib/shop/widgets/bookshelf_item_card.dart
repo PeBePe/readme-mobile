@@ -43,7 +43,9 @@ class _BookshelfItemCardState extends State<BookshelfItemCard> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ShopItemDetailPage(
-                          shopItem: widget.bookshelfItem.item),
+                        shopItem: widget.bookshelfItem.item,
+                        openedFromCart: false,
+                      ),
                     ),
                   );
                 },

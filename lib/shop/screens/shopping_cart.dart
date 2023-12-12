@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:readme_mobile/shop/widgets/cart_item_card.dart';
 
 class ShoppingCartPage extends StatefulWidget {
-  const ShoppingCartPage({super.key});
+  final ValueNotifier<int> loyaltyPoints;
+
+  const ShoppingCartPage(this.loyaltyPoints, {super.key});
 
   @override
   State<ShoppingCartPage> createState() => _ShoppingCartPageState();
@@ -41,6 +43,28 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
         backgroundColor: const Color(0xFFFAEFDF),
         foregroundColor: const Color(0xFF1E1915),
         centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Row(
+              children: <Widget>[
+                const Icon(
+                  Icons.stars,
+                  color: Color(0xfffbbd61),
+                  size: 28,
+                ),
+                const SizedBox(width: 2),
+                Text(
+                  widget.loyaltyPoints.value.toString(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: fetchItem(request),
@@ -161,6 +185,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     content: Text(message),
                   ));
                 if (response['status']) {
+                  widget.loyaltyPoints.value -= total.value;
                   setState(() {}); // rebuild the widget
                 }
               },

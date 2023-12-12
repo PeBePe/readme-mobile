@@ -42,8 +42,10 @@ class _ShopItemCardState extends State<ShopItemCard> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ShopItemDetailPage(shopItem: widget.shopItem),
+                      builder: (context) => ShopItemDetailPage(
+                        shopItem: widget.shopItem,
+                        openedFromCart: false,
+                      ),
                     ),
                   );
                 },
