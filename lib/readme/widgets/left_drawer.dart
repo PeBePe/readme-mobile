@@ -3,7 +3,7 @@ import 'package:readme_mobile/readme/screens/profile.dart';
 import 'package:readme_mobile/readme/screens/menu.dart';
 import 'package:readme_mobile/shop/screens/shop.dart';
 import 'package:readme_mobile/quotes/screens/quotes.dart';
-import 'package:readme_mobile/books/screens/books.dart';
+import 'package:readme_mobile/books/screens/list_books.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -81,7 +81,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const BooksPage(),
+                  builder: (context) => const ListBooks(),
                 ),
               );
             },

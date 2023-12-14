@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/books/screens/list_books.dart';
 import 'package:readme_mobile/readme/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -27,13 +28,12 @@ class MyApp extends StatelessWidget {
         return request;
       },
       child: MaterialApp(
-        title: 'PBP A03',
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-            useMaterial3: true,
-            fontFamily: 'Lato'),
-        home: isLoggedIn ? const MyHomePage() : const LoginPage(),
-      ),
+          title: 'PBP A03',
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+              useMaterial3: true,
+              fontFamily: 'Lato'),
+          home: const ListBooks()),
     );
   }
 }

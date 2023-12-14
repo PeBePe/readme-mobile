@@ -16,7 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<HomeResponse> fetchHome() async {
-    var url = Uri.parse('http://localhost:8000/api/home');
+    var url = Uri.parse('https://readme.up.railway.app/api/home');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -34,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return FutureBuilder(
       future: fetchHome(),
       builder: (context, AsyncSnapshot snapshot) {
+        print(snapshot);
         if (snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());
         } else {
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             );
           } else {
+            print(snapshot.data);
             return Scaffold(
               appBar: AppBar(
                 title: Row(
