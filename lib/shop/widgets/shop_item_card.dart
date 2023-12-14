@@ -3,6 +3,7 @@ import 'package:readme_mobile/shop/models/shop_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:readme_mobile/shop/screens/shop_item_detail.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class ShopItemCard extends StatefulWidget {
   final ShopItemElement shopItem;
@@ -121,7 +122,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                   onPressed: widget.shopItem.amount > 0
                       ? () async {
                           final response = await request.post(
-                            "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
+                            "$baseUrl/shop/add-to-cart/${widget.shopItem.id}",
                             "",
                           );
                           String message = response['message'];

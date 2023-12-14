@@ -7,6 +7,7 @@ import 'package:readme_mobile/quotes/screens/quotes.dart';
 import 'package:readme_mobile/books/screens/books.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -108,8 +109,7 @@ class LeftDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             onTap: () async {
-              var response =
-                  await request.get('http://10.0.2.2:8000/api/auth/logout');
+              var response = await request.get('$baseUrl/auth/logout');
               if (response['status']) {
                 // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(

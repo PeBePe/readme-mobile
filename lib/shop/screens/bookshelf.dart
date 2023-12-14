@@ -3,6 +3,7 @@ import 'package:readme_mobile/shop/widgets/bookshelf_item_card.dart';
 import 'package:readme_mobile/shop/models/bookshelf_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class BookshelfPage extends StatefulWidget {
   const BookshelfPage({super.key});
@@ -13,7 +14,7 @@ class BookshelfPage extends StatefulWidget {
 
 class _BookshelfPageState extends State<BookshelfPage> {
   Future<List<BookshelfItemElement>> fetchItem(request) async {
-    var data = await request.get("http://10.0.2.2:8000/api/shop/bookshelf");
+    var data = await request.get("$baseUrl/shop/bookshelf");
 
     List<BookshelfItemElement> items = [];
     for (var i = 0; i < data['bookshelf_items'].length; i++) {
