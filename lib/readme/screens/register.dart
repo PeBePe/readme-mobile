@@ -2,6 +2,7 @@ import 'package:readme_mobile/readme/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 void main() {
   runApp(const RegisterApp());
@@ -134,8 +135,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (pickedDate != null) {
                       setState(() {
                         _birthdate = pickedDate;
-                        _birthdateController.text =
-                            "${_birthdate!.day}/${_birthdate!.month}/${_birthdate!.year}"; // format it as you want
+                        _birthdateController.text = _birthdateController.text =
+                            "${_birthdate!.year}-${_birthdate!.month.toString().padLeft(2, '0')}-${_birthdate!.day.toString().padLeft(2, '0')}"; // format it as you want
                       });
                     }
                   },
@@ -178,7 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return;
                     }
                     final response = await request.post(
-                      "http://10.0.2.2:8000/api/auth/register",
+                      "$baseUrl/auth/register",
                       {
                         'name': name,
                         'username': username,
