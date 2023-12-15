@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
+import 'package:readme_mobile/quotes/screens/edit_form.dart';
 import 'package:readme_mobile/quotes/screens/quotes_form.dart';
 import 'package:readme_mobile/quotes/widgets/quotes_card.dart'; 
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class QuotesPage extends StatefulWidget {
-  //final String username;
-
-  //const QuotesPage({Key? key, required this.username}) : super(key: key);
   const QuotesPage({super.key});
 
   @override
@@ -16,35 +13,41 @@ class QuotesPage extends StatefulWidget {
 }
 
 class _QuotesPageState extends State<QuotesPage> {
-  // Inisialisasi dummyQuotes di sini
-  late final List<Product> dummyQuotes;
-
-  @override
-  void initState() {
-    super.initState();
-    dummyQuotes = []; // List ini sekarang kosong dan siap untuk diisi dengan data baru
-  }
+  final List<Product> _quotes = [];
 
   Future<void> _navigateAndAddQuote() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+    );
+
+    if (result != null) {
+      setState(() {
+        _quotes.add(Product(
+          model: 'quotes_model', // Sesuaikan dengan model Anda
+          pk: _quotes.length + 1,
+          fields: Fields(
+            createdAt: result['date'],
+            updatedAt: result['date'],
+            quote: result['quote'],
+            user: 1, // Sesuaikan dengan logika user Anda
+            username: result['username'],
+          ),
+        ));
+      });
+    }
+  }
+
+  void _editQuote(int index) async {
   final result = await Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+    MaterialPageRoute(builder: (context) => QuotesEditPage(quote: _quotes[index])),
   );
 
   if (result != null) {
     setState(() {
-      // Tambahkan data baru ke list
-      dummyQuotes.add(Product(
-        model: 'Model Baru', // Sesuaikan sesuai kebutuhan
-        pk: dummyQuotes.length + 1, // Atau gunakan cara yang lebih baik untuk mengatur primary key
-        fields: Fields(
-          createdAt: result['date'],
-          updatedAt: result['date'],
-          quote: result['quote'],
-          user: 1, // Sesuaikan dengan logika user Anda
-          username: result['username'],
-        ),
-      ));
+      // Update quote di list
+      _quotes[index] = result;
     });
   }
 }
@@ -52,7 +55,6 @@ class _QuotesPageState extends State<QuotesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F7F4),
       appBar: AppBar(
         title: const Text('Quotes'),
         backgroundColor: const Color(0xFFFAEFDF),
@@ -60,48 +62,30 @@ class _QuotesPageState extends State<QuotesPage> {
         centerTitle: true,
       ),
       drawer: const LeftDrawer(),
-      body: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Menampilkan dua card dalam satu baris
-                childAspectRatio: 1.0, // Mengatur agar card menjadi persegi
-              ),
-              itemCount: dummyQuotes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return QuoteCard(quote: dummyQuotes[index]);
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.0,
+        ),
+        itemCount: _quotes.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              _editQuote(index);
+            },
+            child: QuoteCard(
+              //key: ValueKey<String>(_quotes[index].pk.toString()),
+              quote: _quotes[index],
+              onEditPressed: () {
+                _editQuote(index);
               },
+              //quotes: _quotes,
             ),
-          ),
-        ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigator.push untuk membuka QuotesFormPage
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QuotesFormPage()),
-          );
-
-          // Setelah QuotesFormPage ditutup, Anda dapat menangani hasil yang dikirim kembali di sini
-          if (result != null) {
-            setState(() {
-              // Tambahkan data baru ke list
-              dummyQuotes.add(Product(
-                model: 'Model Baru',
-                pk: dummyQuotes.length + 1,
-                fields: Fields(
-                  createdAt: result['date'],
-                  updatedAt: result['date'],
-                  quote: result['quote'],
-                  user: 1, // Sesuaikan dengan logika user Anda
-                  username: result['username'],
-                ),
-              ));
-            });
-          }
-        },
+        onPressed: _navigateAndAddQuote,
         child: const Icon(Icons.add),
         backgroundColor: const Color(0xFFFAEFDF),
       ),
