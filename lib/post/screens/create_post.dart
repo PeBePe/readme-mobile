@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:readme_mobile/books/models/books_model.dart';
+import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/post/screens/post_detail.dart';
 
 class CreatePostPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _CreatePostPage extends State<CreatePostPage> {
 
   Future<Books> fetchBookData(int bookId) async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/books'));
+        await http.get(Uri.parse('$baseUrl/books'));
 
     if (response.statusCode == 200) {
       return booksFromJson(response.body); // This returns a Books object
@@ -117,35 +117,32 @@ class _CreatePostPage extends State<CreatePostPage> {
           const SizedBox(height: 24.0),
           FloatingActionButton.extended(
             onPressed: () async {
-              final response2 = await request.post(
-                'https://readme.up.railway.app/api/post/create/1',
-                {
-                  'content': "tes create flutter",
-                },
-              );
-              print(response2);
-              // if (_contentController.text.isNotEmpty) {
-
-              //   if (response['status'] == true) {
-              //     final int postId = response['post']['id'];
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(content: Text('Post created successfully')),
-              //     );
-              //     Navigator.pushReplacement(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => PostDetail(postId: postId)),
-              //     );
-              //   } else {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(content: Text(response['message'])),
-              //     );
-              //   }
-              // } else {
-              //   ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(content: Text('Content cannot be empty')),
-              //   );
-              // }
+              if (_contentController.text.isNotEmpty) {
+                final response = await request.post(
+                  '$baseUrl/post/create/${widget.bookId}',
+                  {'content': _contentController.text},
+                );
+                if (response['status'] == true && response.containsKey('post')) {
+                  final int postId = response['post']['id'];
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Post created successfully')),
+                  );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostDetail(postId: postId),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to create post')),
+                  );
+                }
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Content cannot be empty')),
+                );
+              }
             },
             icon: Icon(Icons.add),
             label: Text('Create Post'),

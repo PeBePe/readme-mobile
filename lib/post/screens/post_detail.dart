@@ -1,5 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/post/models/post.dart';
 import 'package:intl/intl.dart';
 
@@ -23,7 +28,7 @@ class _PostDetailState extends State<PostDetail> {
 
   Future<PostItem> fetchPostById(int postId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/post/$postId'),
+      Uri.parse('$baseUrl/post/$postId'),
       headers: {"Content-Type": "application/json"},
     );
 
@@ -32,6 +37,48 @@ class _PostDetailState extends State<PostDetail> {
     } else {
       throw Exception('Failed to load post');
     }
+  }
+
+  Future<void> deletePost(int postId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/post/delete/$postId'),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).pop(true); // Pop the current screen and indicate that the deletion was successful
+    } else {
+      final errorData = jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${errorData['message']}'),
+        ),
+      );
+    }
+  }
+
+  Future<bool> confirmDelete() async {
+    return (await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this post?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(false), // pop false when cancel is pressed
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () => Navigator.of(context).pop(true), // pop true when delete is pressed
+            ),
+          ],
+        );
+      },
+    )) ?? false; // If showDialog returns null, treat it as 'false'
   }
 
   @override
@@ -94,6 +141,17 @@ class _PostDetailState extends State<PostDetail> {
                             Text(
                               post.content,
                               style: TextStyle(fontSize: 16),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (await confirmDelete()) {
+                                  await deletePost(widget.postId);
+                                }
+                              },
+                              child: Text('Delete Post'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red, // Change button color to indicate a destructive action
+                              ),
                             ),
                             SizedBox(height: 16),
                             Divider(),

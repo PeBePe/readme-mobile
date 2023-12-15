@@ -4,6 +4,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:readme_mobile/readme/screens/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 void main() {
   runApp(const LoginApp());
@@ -83,8 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Cek kredensial
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
-                final response = await request
-                    .login("http://10.0.2.2:8000/api/auth/login", {
+                final response = await request.login("$baseUrl/auth/login", {
                   'username': username,
                   'password': password,
                 });
