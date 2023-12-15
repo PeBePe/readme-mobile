@@ -104,6 +104,10 @@ class _QuotesFormPageState extends State<QuotesFormPage> {
                       _submitQuote();
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
                   child: const Text('Submit Quotes'),
                 ),
               ),

@@ -25,9 +25,6 @@ class QuotesDetailPage extends StatelessWidget {
             Text("Created Date: ${quotes.fields.createdAt}"),
             const SizedBox(height: 10),
             Text("Updated at: ${quotes.fields.updatedAt}"),
-            // const SizedBox(height: 10),
-            // Text("Date Added: ${quotes.fields.user}"),
-            // Tambahkan informasi lainnya sesuai kebutuhan
           ],
         ),
       ),

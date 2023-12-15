@@ -31,14 +31,13 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
       pk: widget.quote.pk,
       fields: Fields(
         createdAt: widget.quote.fields.createdAt,
-        updatedAt: DateTime.now(), // Tanggal diubah
-        quote: _editedQuote, // Isi quotes yang diubah
+        updatedAt: DateTime.now(), 
+        quote: _editedQuote, // Mengubah isi quote
         user: widget.quote.fields.user,
         username: widget.quote.fields.username,
       ),
     );
 
-    print("Edited Quote: ${editedQuote.fields.quote}"); //debug
     Navigator.pop(context, editedQuote);
   }
 
