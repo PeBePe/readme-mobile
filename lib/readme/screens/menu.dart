@@ -4,8 +4,8 @@ import 'package:readme_mobile/readme/widgets/book_home.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:readme_mobile/readme/widgets/post_home.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -16,7 +16,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<HomeResponse> fetchHome() async {
-    var url = Uri.parse('http://localhost:8000/api/home');
+    var url = Uri.parse('$baseUrl/home');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
