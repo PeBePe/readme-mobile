@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/post/screens/post_detail.dart';
 import 'package:readme_mobile/readme/models/home-response.dart';
 import 'package:intl/intl.dart';
 
@@ -63,12 +64,18 @@ class PostHome extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      ctx,
+                      MaterialPageRoute(
+                        builder: (context) => PostDetail(postId: posts[index].id),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Tampilkan lebih banyak",
                     style: TextStyle(
-                      color: Color.fromARGB(
-                          255, 0, 99, 93), // Atur warna sesuai kebutuhan
+                      color: Color.fromARGB(255, 0, 99, 93),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

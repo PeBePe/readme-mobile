@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/post/screens/create_post.dart';
 import 'package:readme_mobile/readme/models/home-response.dart';
 import 'package:readme_mobile/readme/widgets/book_home.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
@@ -16,7 +17,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<HomeResponse> fetchHome() async {
-    var url = Uri.parse('http://localhost:8000/api/home');
+    var url = Uri.parse('http://10.0.2.2:8000/api/home');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -49,6 +50,15 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           } else {
             return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreatePostPage(bookId: 1),
+                  ));
+                },
+                child: const Icon(Icons.add),
+                backgroundColor: Colors.deepOrange,
+              ),
               appBar: AppBar(
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
