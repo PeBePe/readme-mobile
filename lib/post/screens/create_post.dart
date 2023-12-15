@@ -9,7 +9,7 @@ import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/post/screens/post_detail.dart';
 
 class CreatePostPage extends StatefulWidget {
-  final int bookId; // ID of the book you want to display
+  final int bookId;
 
   CreatePostPage({Key? key, required this.bookId}) : super(key: key);
 

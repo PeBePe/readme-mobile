@@ -1,12 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/post/models/post.dart';
 import 'package:intl/intl.dart';
+import 'package:readme_mobile/post/screens/edit_post.dart';
 
 class PostDetail extends StatefulWidget {
   final int postId;
@@ -39,46 +42,28 @@ class _PostDetailState extends State<PostDetail> {
     }
   }
 
-  Future<void> deletePost(int postId) async {
-    final response = await http.delete(
-      Uri.parse('$baseUrl/post/delete/$postId'),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
+  Future<void> deletePost(int postId, CookieRequest request) async {
+    var url = Uri.parse('$baseUrl/post/delete/$postId');
 
-    if (response.statusCode == 200) {
-      Navigator.of(context).pop(true); // Pop the current screen and indicate that the deletion was successful
-    } else {
-      final errorData = jsonDecode(response.body);
+    try {
+      final response = await http.delete(url, headers: request.headers);
+      var responseData = jsonDecode(response.body);
+
+      if (responseData['status'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Post deleted successfully')),
+        );
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete post')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${errorData['message']}'),
-        ),
+        SnackBar(content: Text('Error: $e')),
       );
     }
-  }
-
-  Future<bool> confirmDelete() async {
-    return (await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this post?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(false), // pop false when cancel is pressed
-            ),
-            TextButton(
-              child: const Text('Delete'),
-              onPressed: () => Navigator.of(context).pop(true), // pop true when delete is pressed
-            ),
-          ],
-        );
-      },
-    )) ?? false; // If showDialog returns null, treat it as 'false'
   }
 
   @override
@@ -142,17 +127,58 @@ class _PostDetailState extends State<PostDetail> {
                               post.content,
                               style: TextStyle(fontSize: 16),
                             ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (await confirmDelete()) {
-                                  await deletePost(widget.postId);
-                                }
+                            SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                // Navigate to the EditPostPage
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditPostPage(
+                                      //bookId: post.book.id,
+                                      postId: widget.postId,
+                                    ),
+                                  ),
+                                );
                               },
-                              child: Text('Delete Post'),
+                              icon: Icon(Icons.edit),
+                              label: Text('Edit Post'),
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.red, // Change button color to indicate a destructive action
+                                primary: const Color.fromARGB(255, 0, 0, 0),
                               ),
                             ),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                final confirmDelete = await showDialog<bool>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirm Delete'),
+                                      content: const Text('Are you sure you want to delete this post?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Cancel'),
+                                          onPressed: () => Navigator.of(context).pop(false),
+                                        ),
+                                        TextButton(
+                                          child: const Text('Delete'),
+                                          onPressed: () => Navigator.of(context).pop(true),
+                                        ),
+                                      ],
+                                    );}
+                                ) ?? false; 
+
+                                if (confirmDelete) {
+                                  await deletePost(widget.postId, context.read<CookieRequest>());
+                                }
+                              },
+                              icon: Icon(Icons.delete),
+                              label: Text('Delete Post'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent,
+                              ),
+                            ),
+
                             SizedBox(height: 16),
                             Divider(),
                             Row(
