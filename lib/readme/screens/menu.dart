@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:readme_mobile/readme/widgets/post_home.dart';
 import 'package:readme_mobile/constants/constants.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -15,7 +17,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<HomeResponse> fetchHome() async {
+  Future<HomeResponse> fetchHome(request) async {
     var url = Uri.parse('$baseUrl/home');
     var response = await http.get(
       url,
@@ -31,10 +33,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(context) {
+    final request = context.watch<CookieRequest>();
     return FutureBuilder(
-      future: fetchHome(),
+      future: fetchHome(request),
       builder: (context, AsyncSnapshot snapshot) {
-        print(snapshot);
         if (snapshot.data == null) {
           return const Center(child: CircularProgressIndicator());
         } else {
@@ -49,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             );
           } else {
-            print(snapshot.data);
             return Scaffold(
               appBar: AppBar(
                 title: Row(

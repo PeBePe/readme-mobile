@@ -214,14 +214,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                                     _amountToAdd.toString()
                                               },
                                             );
-                                            final response =
-                                                await request.postJson(
-                                              'http://10.0.2.2:8000/api/post/create/${widget.bookId}',
-                                              {
-                                                'content':
-                                                    _contentController.text,
-                                              },
-                                            );
+
                                             String message =
                                                 response['message'];
 
