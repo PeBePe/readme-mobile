@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/books/models/book_detail_response.dart';
 import 'package:readme_mobile/books/models/review_response.dart';
@@ -20,7 +22,7 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
-  String? loggedInUsername;
+  String? loggedInUsername; // Simpan username
   _BookDetailState();
 
   Future<BookDetailResponse> fetchBookDetail() async {
@@ -48,7 +50,7 @@ class _BookDetailState extends State<BookDetail> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? loggedInUsername = prefs.getString("loggedInUsername");
-    this.loggedInUsername = loggedInUsername;
+    this.loggedInUsername = loggedInUsername; // Set username yang lagi login
 
     return reviewResponse;
   }
@@ -82,7 +84,6 @@ class _BookDetailState extends State<BookDetail> {
               return const Center(child: CircularProgressIndicator());
             } else {
               Book book = snapshot.data.book;
-              print(book);
               return Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -259,7 +260,7 @@ class _BookDetailState extends State<BookDetail> {
                             Text(
                               DateFormat('dd MMMM yyyy')
                                   .format(book.publicationDate),
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 5),
                             Text(
@@ -288,12 +289,13 @@ class _BookDetailState extends State<BookDetail> {
                     Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Color.fromARGB(255, 229, 231, 235),
+                              color: const Color.fromARGB(255, 229, 231, 235),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
                             color: Colors.white,
                           ),
                           child: Column(
@@ -303,7 +305,7 @@ class _BookDetailState extends State<BookDetail> {
                                 children: [
                                   Image.asset('assets/images/profile.png'),
                                   const SizedBox(width: 10),
-                                  Text(
+                                  const Text(
                                     "Berikan review",
                                     style: TextStyle(fontSize: 16),
                                   )
@@ -313,7 +315,7 @@ class _BookDetailState extends State<BookDetail> {
                               TextField(
                                 controller: reviewController,
                                 maxLines: 5,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: 'Tulis review Anda di sini...',
                                   border: OutlineInputBorder(),
                                 ),
@@ -337,14 +339,14 @@ class _BookDetailState extends State<BookDetail> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
-                                            title: Text("Error"),
+                                            title: const Text("Error"),
                                             content: Text(errorMessage),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
-                                                child: Text("OK"),
+                                                child: const Text("OK"),
                                               ),
                                             ],
                                           );
@@ -356,7 +358,7 @@ class _BookDetailState extends State<BookDetail> {
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white),
-                                  child: Text("Kirim"),
+                                  child: const Text("Kirim"),
                                 ),
                               ),
                             ],
@@ -380,13 +382,13 @@ class _BookDetailState extends State<BookDetail> {
                                       Review review =
                                           snapshot.data!.reviews[index];
                                       return Container(
-                                        padding: EdgeInsets.all(20),
+                                        padding: const EdgeInsets.all(20),
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Color.fromARGB(
+                                            color: const Color.fromARGB(
                                                 255, 229, 231, 235),
                                           ),
-                                          borderRadius: BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(20)),
                                           color: Colors.white,
                                         ),
@@ -403,7 +405,7 @@ class _BookDetailState extends State<BookDetail> {
                                                   children: [
                                                     Text(
                                                       "${review.user.name} @${review.user.username}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 16),
                                                     ),
                                                     if (review.user.biodata
@@ -416,7 +418,8 @@ class _BookDetailState extends State<BookDetail> {
                                             const SizedBox(height: 20),
                                             Text(
                                               review.content,
-                                              style: TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                             Row(
                                               mainAxisAlignment:
@@ -424,19 +427,20 @@ class _BookDetailState extends State<BookDetail> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  "${review.createdAt}",
-                                                  style: TextStyle(
+                                                  review.createdAt,
+                                                  style: const TextStyle(
                                                       fontSize: 16,
                                                       color: Colors.grey),
                                                 ),
-                                                if (this.loggedInUsername ==
+                                                if (loggedInUsername ==
                                                     review.user.username)
                                                   Row(
                                                     children: [
                                                       IconButton(
                                                         iconSize: 30,
                                                         onPressed: () {},
-                                                        icon: Icon(Icons.edit,
+                                                        icon: const Icon(
+                                                            Icons.edit,
                                                             color:
                                                                 Color.fromARGB(
                                                                     255,
@@ -469,7 +473,7 @@ class _BookDetailState extends State<BookDetail> {
                                                                   (BuildContext
                                                                       context) {
                                                                 return AlertDialog(
-                                                                  title: Text(
+                                                                  title: const Text(
                                                                       "Error"),
                                                                   content: Text(
                                                                       errorMessage),
@@ -480,7 +484,7 @@ class _BookDetailState extends State<BookDetail> {
                                                                         Navigator.of(context)
                                                                             .pop();
                                                                       },
-                                                                      child: Text(
+                                                                      child: const Text(
                                                                           "OK"),
                                                                     ),
                                                                   ],
@@ -490,7 +494,8 @@ class _BookDetailState extends State<BookDetail> {
                                                           }
                                                           setState(() {});
                                                         },
-                                                        icon: Icon(Icons.delete,
+                                                        icon: const Icon(
+                                                            Icons.delete,
                                                             color:
                                                                 Color.fromARGB(
                                                                     255,

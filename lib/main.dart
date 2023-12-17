@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:readme_mobile/books/screens/book_detail.dart';
-import 'package:readme_mobile/books/screens/list_books.dart';
-import 'package:readme_mobile/readme/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +37,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
               useMaterial3: true,
               fontFamily: 'Lato'),
-          home: const BookDetail("title", 1)),
+          home: const LoginPage()),
     );
   }
 }

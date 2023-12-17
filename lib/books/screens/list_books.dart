@@ -242,19 +242,19 @@ class _ListBooksState extends State<ListBooks> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 8.0), // Adjust spacing as needed
+                  const SizedBox(width: 8.0), // Adjust spacing as needed
                   TextButton(
                     onPressed: () {},
                     style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(100),
                           topRight: Radius.circular(100),
                         ),
                       ),
-                      backgroundColor: Color.fromARGB(255, 133, 77, 14),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 22.5, horizontal: 25),
+                      backgroundColor: const Color.fromARGB(255, 133, 77, 14),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 22.5, horizontal: 25),
                     ),
                     child: const Text(
                       'Cari',
