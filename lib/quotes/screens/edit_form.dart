@@ -43,6 +43,7 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Quotes'),

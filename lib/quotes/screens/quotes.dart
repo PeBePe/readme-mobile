@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:readme_mobile/constants/constants.dart';
+import 'dart:convert';
+
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/edit_form.dart';
 import 'package:readme_mobile/quotes/screens/quotes_form.dart';
-import 'package:readme_mobile/quotes/widgets/quotes_card.dart'; 
+import 'package:readme_mobile/quotes/widgets/quotes_card.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 
 class QuotesPage extends StatefulWidget {
@@ -15,6 +19,57 @@ class QuotesPage extends StatefulWidget {
 class _QuotesPageState extends State<QuotesPage> {
   final List<Product> _quotes = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchQuotes();
+  }
+
+  Future<void> _fetchQuotes() async {
+    final url = Uri.parse("$baseUrl/quotes/");
+    
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<Product> quotes = parseQuotes(response.body);
+        setState(() {
+          _quotes.clear();
+          _quotes.addAll(quotes);
+        });
+      } else {
+        print("Gagal mengambil kutipan. Status: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Terjadi kesalahan: $error");
+    }
+  }
+
+  List<Product> parseQuotes(String responseBody) {
+  final Map<String, dynamic> jsonData = jsonDecode(responseBody);
+
+  // Mengambil data quotes dari dalam key "data"
+  final List<dynamic> quotesData = jsonData['data']['quotes'];
+
+  // Mengonversi data quotes menjadi objek Product
+  List<Product> quotesList = quotesData.map<Product>((json) {
+    return Product(
+      model: 'quotes_model',
+      pk: json['id'],
+      fields: Fields(
+        createdAt: DateTime.parse(json['created_at']),
+        updatedAt: DateTime.parse(json['updated_at']),
+        quote: json['quote'],
+        user: json['user_id'],
+        username: jsonData['data']['name'], // Mengambil username dari key "name"
+      ),
+    );
+  }).toList();
+
+  return quotesList;
+}
+
+  // ... (metode _navigateAndAddQuote, _editQuote, _deleteQuote, build, dll)
   Future<void> _navigateAndAddQuote() async {
     final result = await Navigator.push(
       context,
@@ -38,7 +93,7 @@ class _QuotesPageState extends State<QuotesPage> {
     }
   }
 
-  void _editQuote(int index) async {
+    void _editQuote(int index) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => QuotesEditPage(quote: _quotes[index])),
@@ -60,8 +115,7 @@ class _QuotesPageState extends State<QuotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Hitung jumlah quotes
-    final numberOfQuotes = _quotes.length;
+    // ... (Bagian build yang sudah ada)
 
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +133,7 @@ class _QuotesPageState extends State<QuotesPage> {
                 crossAxisCount: 2,
                 childAspectRatio: 1.0,
               ),
-              itemCount: numberOfQuotes,
+              itemCount: _quotes.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
@@ -93,6 +147,7 @@ class _QuotesPageState extends State<QuotesPage> {
                     onDeletePressed: () {
                       _deleteQuote(index);
                     },
+                    currentUserID: _quotes[index].fields.user,
                   ),
                 );
               },
@@ -101,7 +156,7 @@ class _QuotesPageState extends State<QuotesPage> {
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
-              'Terdapat $numberOfQuotes Quotes dalam Profilemu!',
+              'Terdapat ${_quotes.length} Quotes dalam Profilemu!',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,

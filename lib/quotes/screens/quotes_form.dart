@@ -100,7 +100,6 @@ class _QuotesFormPageState extends State<QuotesFormPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Proses data dan navigasi kembali ke laman quotes
                       _submitQuote();
                     }
                   },

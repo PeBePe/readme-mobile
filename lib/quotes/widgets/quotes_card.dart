@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/edit_form.dart';
 
@@ -7,12 +8,14 @@ class QuoteCard extends StatefulWidget {
   late Product quote;
   final Function() onEditPressed;
   final Function() onDeletePressed;
+  final int currentUserID; // Tambahkan properti untuk menyimpan ID pengguna yang saat ini masuk
 
   QuoteCard({
     Key? key,
     required this.quote,
     required this.onEditPressed,
     required this.onDeletePressed,
+    required this.currentUserID,
   }) : super(key: key);
 
   @override
@@ -20,6 +23,13 @@ class QuoteCard extends StatefulWidget {
 }
 
 class _QuoteCardState extends State<QuoteCard> {
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting(); // Inisialisasi format tanggal dan zona waktu lokal
+    Intl.defaultLocale = 'id_ID';
+  }
+
   void _editQuote() async {
     final result = await Navigator.push(
       context,
@@ -36,6 +46,9 @@ class _QuoteCardState extends State<QuoteCard> {
   @override
   Widget build(BuildContext context) {
     Fields fields = widget.quote.fields;
+
+    // Periksa apakah pengguna yang membuat quote sesuai dengan pengguna yang saat ini masuk
+    final bool isCurrentUserQuote = fields.user == widget.currentUserID;
 
     return Card(
       elevation: 4.0,
@@ -55,47 +68,49 @@ class _QuoteCardState extends State<QuoteCard> {
             ),
             Text(
               '"' + fields.quote + '"',
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 15.0,
                 fontWeight: FontWeight.normal,
               ),
             ),
             Text(
-              'Created Date: ' + DateFormat('dd MMM yyyy HH:mm').format(fields.createdAt),
+              'Created Date: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(fields.createdAt. toLocal()),
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey,
               ),
             ),
             Text(
-              'Updated at: ' + DateFormat('dd MMM yyyy HH:mm').format(fields.updatedAt),
+              'Updated at: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(fields.updatedAt.toLocal()),
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 10.0), // Atur jarak isi card dan button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _editQuote,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+            const SizedBox(height: 10.0), 
+            if (isCurrentUserQuote) // Hanya tampilkan tombol jika pengguna yang membuat quote sama dengan pengguna saat ini
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: _editQuote,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Edit Quotes'),
                   ),
-                  child: const Text('Edit Quotes'),
-                ),
-                ElevatedButton(
-                  onPressed: widget.onDeletePressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pinkAccent,
-                    foregroundColor: Colors.white,
+                  ElevatedButton(
+                    onPressed: widget.onDeletePressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pinkAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Delete Quotes'),
                   ),
-                  child: const Text('Delete Quotes'),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),
