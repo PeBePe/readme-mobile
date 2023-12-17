@@ -51,7 +51,7 @@ class _BookshelfPageState extends State<BookshelfPage> {
             );
           } else {
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
               itemCount: (snapshot.data.length / 2).ceil(),
               itemBuilder: (context, index) {
                 int start = index * 2;
@@ -71,7 +71,7 @@ class _BookshelfPageState extends State<BookshelfPage> {
                               fit: FlexFit.tight,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 6.0),
                                 child: BookshelfItemCard(item),
                               ),
                             );
@@ -83,7 +83,7 @@ class _BookshelfPageState extends State<BookshelfPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16.0), // add a gap between each row
+                    const SizedBox(height: 12.0), // add a gap between each row
                   ],
                 );
               },
