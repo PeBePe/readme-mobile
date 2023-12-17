@@ -64,7 +64,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                     const Icon(
                       Icons.stars,
                       color: Color(0xfffbbd61),
-                      size: 28,
+                      size: 26,
                     ),
                     const SizedBox(width: 2),
                     ValueListenableBuilder<int>(
@@ -73,7 +73,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                         return Text(
                           '$value',
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         );
@@ -108,7 +108,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                       "${snapshot.data.book.title}",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -123,7 +123,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                       child: Text(
                         snapshot.data.book.category,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -137,7 +137,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                             Text(
                               '${snapshot.data.amount} Available',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -147,13 +147,13 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                 const Icon(
                                   Icons.stars,
                                   color: Color(0xfffbbd61),
-                                  size: 28,
+                                  size: 26,
                                 ),
                                 const SizedBox(width: 2),
                                 Text(
                                   snapshot.data.price.toString(),
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

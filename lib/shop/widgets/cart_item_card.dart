@@ -61,9 +61,8 @@ class _CartItemCardState extends State<CartItemCard> {
                 },
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 220,
-                      width: 150,
+                    AspectRatio(
+                      aspectRatio: 150 / 220,
                       child: Image.network(widget.cartItem.item.book.imageUrl,
                           fit: BoxFit.fill),
                     ),
@@ -72,7 +71,7 @@ class _CartItemCardState extends State<CartItemCard> {
                       "${widget.cartItem.item.book.title} (${widget.cartItem.item.book.publicationDate.year})",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         // color: Colors.white,
                       ),
@@ -88,13 +87,13 @@ class _CartItemCardState extends State<CartItemCard> {
                   const Icon(
                     Icons.stars,
                     color: Color(0xfffbbd61),
-                    size: 28,
+                    size: 26,
                   ),
                   const SizedBox(width: 2),
                   Text(
                     '${widget.cartItem.item.price * widget.cartItem.amount}',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -144,7 +143,7 @@ class _CartItemCardState extends State<CartItemCard> {
                               child: Text(
                                 '${widget.cartItem.amount}',
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -196,7 +195,6 @@ class _CartItemCardState extends State<CartItemCard> {
                       child: const Icon(
                         Icons.delete,
                         color: Colors.white,
-                        size: 22,
                       ),
                     ),
                   ),
