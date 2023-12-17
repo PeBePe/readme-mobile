@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/books/screens/book_detail.dart';
 import 'package:readme_mobile/books/screens/list_books.dart';
 import 'package:readme_mobile/readme/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -10,15 +11,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-  // bool isLoggedIn = true;
+  String? loggedInUsername = prefs.getString('loggedInUsername');
 
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(MyApp(
+    isLoggedIn: isLoggedIn,
+    loggedInUsername: loggedInUsername,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
+  final String? loggedInUsername;
 
-  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
+  const MyApp(
+      {Key? key, required this.isLoggedIn, required this.loggedInUsername})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
               useMaterial3: true,
               fontFamily: 'Lato'),
-          home: const ListBooks()),
+          home: const BookDetail("title", 1)),
     );
   }
 }

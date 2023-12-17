@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/books/models/book_response.dart';
+import 'package:readme_mobile/books/screens/book_detail.dart';
 import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -154,7 +155,13 @@ class _ListBooksState extends State<ListBooks> {
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(100.0),
                                     onTap: () {
-                                      // Add your detail button logic here
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BookDetail(book.title, book.id),
+                                        ),
+                                      );
                                     },
                                     child: const Padding(
                                       padding: EdgeInsets.symmetric(
