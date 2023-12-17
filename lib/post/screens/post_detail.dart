@@ -46,17 +46,14 @@ class _PostDetailState extends State<PostDetail> {
     var url = Uri.parse('$baseUrl/post/delete/$postId');
     try {
       final response = await http.delete(url, headers: request.headers);
-      // Assuming the response returns a JSON object with a 'status' key
       var responseData = jsonDecode(response.body);
       if (response.statusCode == 200 && responseData['status'] == true) {
         return true;
       } else {
-        // Log the reason for failure
         print('Failed to delete post: ${response.body}');
         return false;
       }
     } catch (e) {
-      // Handle any exceptions by logging them and returning false.
       print('Exception caught while deleting post: $e');
       return false;
     }
@@ -69,14 +66,14 @@ class _PostDetailState extends State<PostDetail> {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        return data['likes_count']; // Assuming the server returns the updated count
+        return data['likes_count'];
       } else {
         print("Error: ${response.body}");
-        return -1; // Indicate an error
+        return -1;
       }
     } catch (e) {
       print("Exception caught: $e");
-      return -1; // Indicate an error
+      return -1;
     }
   }
 
