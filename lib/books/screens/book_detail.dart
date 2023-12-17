@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:readme_mobile/books/models/book_detail_response.dart';
 import 'package:readme_mobile/books/models/review_response.dart';
+import 'package:readme_mobile/books/screens/review_edit.dart';
 import 'package:readme_mobile/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -25,19 +26,6 @@ class _BookDetailState extends State<BookDetail> {
   String? loggedInUsername; // Simpan username
   _BookDetailState();
 
-  Future<BookDetailResponse> fetchBookDetail() async {
-    var url = Uri.parse('$baseUrl/books/${widget.id}');
-    var response = await http.get(
-      url,
-      headers: {"Content-Type": "application/json"},
-    );
-    var data = jsonDecode(utf8.decode(response.bodyBytes));
-
-    var bookDetailResponse = BookDetailResponse.fromJson(data);
-
-    return bookDetailResponse;
-  }
-
   Future<ReviewResponse> fetchBookReview() async {
     var url = Uri.parse('$baseUrl/books/review/${widget.id}');
     var response = await http.get(
@@ -55,9 +43,17 @@ class _BookDetailState extends State<BookDetail> {
     return reviewResponse;
   }
 
-  Future<String?> getLoggedInUsername() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("loggedInUsername");
+  Future<BookDetailResponse> fetchBookDetail() async {
+    var url = Uri.parse('$baseUrl/books/${widget.id}');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    var bookDetailResponse = BookDetailResponse.fromJson(data);
+
+    return bookDetailResponse;
   }
 
   @override
@@ -330,7 +326,7 @@ class _BookDetailState extends State<BookDetail> {
                                         "$baseUrl/books/add-review/${widget.id}",
                                         {"content": review});
 
-                                    bool status = response['status'];
+                                    var status = response is Map ? false : true;
                                     if (!status) {
                                       // Handle error message
                                       String errorMessage = response['message'];
@@ -438,7 +434,18 @@ class _BookDetailState extends State<BookDetail> {
                                                     children: [
                                                       IconButton(
                                                         iconSize: 30,
-                                                        onPressed: () {},
+                                                        onPressed: () async {
+                                                          await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ReviewEdit(
+                                                                      review,
+                                                                      book), // Gantilah EditPage dengan nama halaman edit Anda
+                                                            ),
+                                                          );
+                                                          setState(() {});
+                                                        },
                                                         icon: const Icon(
                                                             Icons.edit,
                                                             color:
