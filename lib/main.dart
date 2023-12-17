@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'PBP A03',
           theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: const Color(0xFFFAEFDF)),
               useMaterial3: true,
               fontFamily: 'Lato'),
           home: const LoginPage()),

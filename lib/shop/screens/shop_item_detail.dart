@@ -199,7 +199,8 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                           final intValue = int.tryParse(
                                               _amountController.text);
                                           if (intValue == null ||
-                                              intValue < 1) {
+                                              intValue < 1 ||
+                                              intValue > snapshot.data.amount) {
                                             ScaffoldMessenger.of(context)
                                               ..hideCurrentSnackBar()
                                               ..showSnackBar(const SnackBar(
