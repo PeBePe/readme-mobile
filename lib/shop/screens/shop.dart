@@ -5,6 +5,7 @@ import 'package:readme_mobile/shop/models/shop_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:readme_mobile/shop/screens/shopping_cart.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -19,7 +20,7 @@ class _ShopPageState extends State<ShopPage> {
   ValueNotifier<int> loyaltyPoints = ValueNotifier<int>(0);
 
   Future<List<ShopItemElement>> fetchItem(request) async {
-    var url = Uri.http('10.0.2.2:8000', '/api/shop', {
+    var url = Uri.parse('$baseUrl/shop').replace(queryParameters: {
       'q': _searchTerm,
       'pricerange': _priceRange,
     });
@@ -33,8 +34,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Future<int> fetchProfile(request) async {
-    var url = Uri.http('10.0.2.2:8000', '/api/profile');
-    var data = await request.get(url.toString());
+    var data = await request.get('$baseUrl/profile');
     if (data['status']) {
       loyaltyPoints.value = data['user']['loyalty_point'];
       return loyaltyPoints.value;

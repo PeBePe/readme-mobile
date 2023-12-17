@@ -4,6 +4,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:readme_mobile/shop/screens/shopping_cart.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class ShopItemDetailPage extends StatefulWidget {
   final ShopItemElement shopItem;
@@ -25,15 +26,13 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
   final _amountController = TextEditingController(text: '1');
 
   Future<ShopItemElement> fetchItem(request) async {
-    var data = await request
-        .get("http://10.0.2.2:8000/api/shop/${widget.shopItem.id}");
+    var data = await request.get("$baseUrl/shop/${widget.shopItem.id}");
 
     return ShopItemElement.fromJson(data["shop_item"]);
   }
 
   Future<int> fetchProfile(request) async {
-    var url = Uri.http('10.0.2.2:8000', '/api/profile');
-    var data = await request.get(url.toString());
+    var data = await request.get('$baseUrl/profile');
     if (data['status']) {
       loyaltyPoints.value = data['user']['loyalty_point'];
       return loyaltyPoints.value;
@@ -209,12 +208,13 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                               ));
                                           } else {
                                             final response = await request.post(
-                                              "http://10.0.2.2:8000/api/shop/add-to-cart/${widget.shopItem.id}",
+                                              "$baseUrl/shop/add-to-cart/${widget.shopItem.id}",
                                               {
                                                 "amount":
                                                     _amountToAdd.toString()
                                               },
                                             );
+
                                             String message =
                                                 response['message'];
 
@@ -224,17 +224,19 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                               ..showSnackBar(SnackBar(
                                                 content: Text(message),
                                               ));
-                                            if (widget.openedFromCart) {
+                                            if (response['status']) {
+                                              if (widget.openedFromCart) {
+                                                Navigator.pop(context);
+                                              }
                                               Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ShoppingCartPage(
+                                                            loyaltyPoints)),
+                                              );
                                             }
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ShoppingCartPage(
-                                                          loyaltyPoints)),
-                                            );
                                           }
                                         }
                                       : null, // disable the button when the shop item amount is 0

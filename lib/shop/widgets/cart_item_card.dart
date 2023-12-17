@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:readme_mobile/shop/screens/shop_item_detail.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class CartItemCard extends StatefulWidget {
   final CartItem cartItem;
@@ -210,8 +211,7 @@ class _CartItemCardState extends State<CartItemCard> {
 
   Future<void> incrementCartItem(
       String cartItemId, CookieRequest request) async {
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/increment-cart-item/$cartItemId');
+    var url = Uri.parse('$baseUrl/shop/cart/increment-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -231,8 +231,7 @@ class _CartItemCardState extends State<CartItemCard> {
 
   Future<void> decrementCartItem(
       String cartItemId, CookieRequest request) async {
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/decrement-cart-item/$cartItemId');
+    var url = Uri.parse('$baseUrl/shop/cart/decrement-cart-item/$cartItemId');
     var response = await http.put(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {
@@ -253,8 +252,7 @@ class _CartItemCardState extends State<CartItemCard> {
   }
 
   Future<void> deleteCartItem(CartItem cartItem, CookieRequest request) async {
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/shop/cart/remove-from-cart/${cartItem.id}');
+    var url = Uri.parse('$baseUrl/shop/cart/remove-from-cart/${cartItem.id}');
     var response = await http.delete(url, headers: request.headers);
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == true) {

@@ -3,6 +3,7 @@ import 'package:readme_mobile/shop/models/cart_item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:readme_mobile/shop/widgets/cart_item_card.dart';
+import 'package:readme_mobile/constants/constants.dart';
 
 class ShoppingCartPage extends StatefulWidget {
   final ValueNotifier<int> loyaltyPoints;
@@ -17,7 +18,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
   ValueNotifier<int> total = ValueNotifier<int>(0);
 
   Future<List<CartItem>> fetchItem(request) async {
-    var data = await request.get('http://10.0.2.2:8000/api/shop/cart');
+    var data = await request.get('$baseUrl/shop/cart');
 
     List<CartItem> items = [];
     int newTotal = 0;
@@ -174,7 +175,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               ),
               onPressed: () async {
                 final response = await request.post(
-                  "http://10.0.2.2:8000/api/shop/cart/checkout",
+                  "$baseUrl/shop/cart/checkout",
                   "",
                 );
                 String message = response['message'];
