@@ -47,8 +47,8 @@ class HomeResponse {
 }
 
 class BestQuote {
-  String quote;
-  String author;
+  String? quote;
+  String? author;
 
   BestQuote({
     required this.quote,

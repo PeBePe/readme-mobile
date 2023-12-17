@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   await prefs.setBool('isLoggedIn', false);
+                  await prefs.setString('loggedInUsername', uname);
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacement(
                     context,

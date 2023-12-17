@@ -214,6 +214,7 @@ class _ShopItemDetailPageState extends State<ShopItemDetailPage> {
                                                     _amountToAdd.toString()
                                               },
                                             );
+
                                             String message =
                                                 response['message'];
 
