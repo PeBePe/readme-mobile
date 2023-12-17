@@ -128,7 +128,7 @@ class _ShopPageState extends State<ShopPage> {
                     const Icon(
                       Icons.stars,
                       color: Color(0xfffbbd61),
-                      size: 28,
+                      size: 26,
                     ),
                     const SizedBox(width: 2),
                     ValueListenableBuilder<int>(
@@ -137,7 +137,7 @@ class _ShopPageState extends State<ShopPage> {
                         return Text(
                           '$value',
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         );
@@ -152,7 +152,7 @@ class _ShopPageState extends State<ShopPage> {
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
               icon: const Icon(Icons.shopping_cart_outlined),
-              iconSize: 30.0,
+              iconSize: 26.0,
               color: const Color(0xFF1E1915),
               onPressed: () {
                 Navigator.push(
@@ -173,7 +173,7 @@ class _ShopPageState extends State<ShopPage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
               itemCount: (snapshot.data.length / 2).ceil(),
               itemBuilder: (context, index) {
                 int start = index * 2;
@@ -193,7 +193,7 @@ class _ShopPageState extends State<ShopPage> {
                               fit: FlexFit.tight,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 6.0),
                                 child: ShopItemCard(item),
                               ),
                             );
@@ -205,7 +205,7 @@ class _ShopPageState extends State<ShopPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16.0), // add a gap between each row
+                    const SizedBox(height: 12.0), // add a gap between each row
                   ],
                 );
               },

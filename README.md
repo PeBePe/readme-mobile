@@ -1,6 +1,13 @@
 # PBP Kelompok A03 - ReadMe
-Tautan APK: -
-Link Berita Acara: https://docs.google.com/spreadsheets/d/1FQarcMZwNFbVh-kgUBArrFmDKMuh1LxWWnzMtjlbBY0/edit#gid=1658173906 
+
+[![Development](https://github.com/PeBePe/readme-mobile/actions/workflows/development.yml/badge.svg)](https://github.com/PeBePe/readme-mobile/actions/workflows/development.yml)
+[![Pre-Release](https://github.com/PeBePe/readme-mobile/actions/workflows/pre-release.yml/badge.svg)](https://github.com/PeBePe/readme-mobile/actions/workflows/pre-release.yml)
+[![Release](https://github.com/PeBePe/readme-mobile/actions/workflows/release.yml/badge.svg)](https://github.com/PeBePe/readme-mobile/actions/workflows/release.yml)
+[![Build status](https://build.appcenter.ms/v0.1/apps/2d3b6ed5-320d-49b8-839c-914eec592af9/branches/main/badge)](https://appcenter.ms)
+
+📱[Tautan APK](https://install.appcenter.ms/orgs/pebepe-a03/apps/readme/distribution_groups/public)📱
+
+🗓️[Tautan Berita Acara](https://docs.google.com/spreadsheets/d/1FQarcMZwNFbVh-kgUBArrFmDKMuh1LxWWnzMtjlbBY0/edit#gid=1658173906)🗓️
 
 <details>
     <summary>Anggota Kelompok</summary>
@@ -17,25 +24,25 @@ Link Berita Acara: https://docs.google.com/spreadsheets/d/1FQarcMZwNFbVh-kgUBArr
     <summary>Cerita Aplikasi</summary>
 
 ## Cerita Aplikasi
-Aplikasi ReadMe adalah aplikasi yang kami buat untuk meningkatkan tingkat literasi di kalangan masyarakat Indonesia dari segala usia. Aplikasi ini menawarkan serangkaian fitur yang memungkinkan pengguna untuk berinteraksi dengan dunia literasi dan buku dengan sangat menarik. Berikut adalah beberapa fitur utama dari aplikasi ReadMe:
+ReadMe adalah aplikasi yang kami buat untuk meningkatkan tingkat literasi di kalangan masyarakat Indonesia dari segala usia. Aplikasi ini menawarkan serangkaian fitur yang memungkinkan pengguna untuk berinteraksi dengan dunia literasi dan buku dengan sangat menarik. Berikut adalah beberapa fitur utama dari aplikasi ReadMe:
 
-1. Loyalty Point :
-Pengguna akan mendapatkan loyalty points sebagai bentuk penghargaan setiap kali mereka berkontribusi dalam aplikasi. Loyalty points dapat dikumpulkan dan diperoleh melalui berbagai kegiatan seperti memberikan review, membagikan posting, atau membuat quotes. Hal ini dapat memberikan insentif bagi pengguna untuk menambah semangat membaca dan berliterasi.
+1. **_Loyalty Points_**:
+Pengguna akan mendapatkan _loyalty points_ sebagai bentuk penghargaan setiap kali mereka berkontribusi di dalam aplikasi. _Loyalty points_ dapat dikumpulkan dan diperoleh melalui berbagai kegiatan seperti memberikan _review_, membagikan _post_, atau membuat _quotes_. Hal ini dapat memberikan insentif bagi pengguna untuk menambah semangat membaca dan berliterasi.
 
-2. Review Buku:
-Pengguna dapat memberikan ulasan terhadap buku-buku yang telah mereka baca. Setiap ulasan memberikan pengguna loyalty points, yang dapat dikumpulkan dan digunakan untuk membeli lebih banyak buku di dalam fitur shop. Ini mendorong pengguna untuk semangat berpartisipasi aktif dalam aplikasi.
+2. **_Review_ Buku**:
+Pengguna dapat memberikan ulasan terhadap buku-buku yang telah mereka baca. Setiap ulasan memberikan pengguna _loyalty points_ yang dapat dikumpulkan dan digunakan untuk membeli lebih banyak buku di dalam fitur _shop_. Hal ini mendorong pengguna untuk semangat berpartisipasi aktif dalam aplikasi.
 
-3. Posting:
-Fitur Posting memungkinkan pengguna untuk berbagi pemikiran, ulasan, diskusi, atau rekomendasi terkait buku. Terdapat fitur like di tiap postingan, dan pengguna mendapatkan loyalty points berdasarkan jumlah like yang diterima. Hal ini tentu dapat menciptakan interaksi sosial yang lebih aktif dan memperluas wawasan literasi.
+3. **_Posting_**:
+Fitur _Posting_ memungkinkan pengguna untuk berbagi pemikiran, ulasan, diskusi, atau rekomendasi terkait buku. Terdapat fitur _like_ di tiap unggahan dan pengguna mendapatkan loyalty points berdasarkan jumlah _like_ yang diterima. Hal ini tentu dapat menciptakan interaksi sosial yang lebih aktif dan memperluas wawasan literasi.
 
-4. Quotes:
-Pengguna dapat membuat quote inspiratif atau berbagi quote dari buku yang mereka suka. Mereka dapat mengutip maksimal tiga quote dari orang lain. Quotes yang dikutip ini akan ditampilkan pada halaman profil pengguna, memberikan pengguna kesempatan untuk berbagi pemikiran dan ide-ide favorit mereka. Loyalty points diberikan berdasarkan jumlah quote buatan pengguna yang dikutip oleh pengguna lain.
+4. **_Quotes_**:
+Pengguna dapat membuat _quote_ inspiratif atau berbagi _quote_ dari buku yang mereka suka. Mereka dapat mengutip maksimal tiga _quote_ dari orang lain. _Quotes_ yang dikutip ini akan ditampilkan pada halaman profil pengguna, memberikan pengguna kesempatan untuk berbagi pemikiran dan ide-ide favorit mereka. _Loyalty points_ diberikan berdasarkan jumlah _quote_ buatan pengguna yang dikutip oleh pengguna lain.
 
-5. Shop dan Penggunaan Loyalty Points:
+5. **_Shop_ dan Penggunaan _Loyalty Points_**:
 Fitur Shop memungkinkan pengguna untuk menggunakan loyalty points yang mereka kumpulkan untuk mendapatkan buku yang mereka inginkan. Ini menciptakan insentif tambahan bagi pengguna untuk terus berpartisipasi dalam komunitas literasi dan memberikan nilai nyata pada setiap kontribusi mereka.
 
-6. Wishlist:
-Pengguna dapat membuat daftar buku yang ingin mereka baca di masa mendatang melalui fitur Wishlist. Hal ini memudahkan pengguna untuk melacak dan menemukan buku-buku yang menarik minat mereka.
+6. **_Wishlist_**:
+Pengguna dapat membuat daftar buku yang ingin mereka baca di masa mendatang melalui fitur _Wishlist_. Hal ini memudahkan pengguna untuk melacak dan menemukan buku-buku yang menarik minat mereka.
 
 Dengan fitur-fitur ini, Kami berharap aplikasi ReadMe tidak hanya menjadi platform literasi yang interaktif tetapi juga dapat membangun komunitas di sekitar kecintaan terhadap membaca. Aplikasi ini bertujuan untuk menciptakan lingkungan yang mendukung pertukaran ide dan pengalaman literasi, menjadikan literasi sebagai pengalaman yang lebih berharga.
 </details>

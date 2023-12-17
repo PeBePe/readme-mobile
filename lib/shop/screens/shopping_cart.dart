@@ -58,7 +58,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 Text(
                   widget.loyaltyPoints.value.toString(),
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -82,7 +82,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
             );
           } else {
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
               itemCount: (snapshot.data.length / 2).ceil(),
               itemBuilder: (context, index) {
                 int start = index * 2;
@@ -102,7 +102,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                               fit: FlexFit.tight,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 6.0),
                                 child: CartItemCard(
                                   cartItem: item,
                                   total: total,
@@ -122,7 +122,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16.0), // add a gap between each row
+                    const SizedBox(height: 12.0), // add a gap between each row
                   ],
                 );
               },
@@ -143,7 +143,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     const Text(
                       'Total price: ',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
