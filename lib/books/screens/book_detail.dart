@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:readme_mobile/post/screens/create_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookDetail extends StatefulWidget {
@@ -151,19 +152,25 @@ class _BookDetailState extends State<BookDetail> {
                               color: const Color.fromARGB(255, 99, 30, 0),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(100.0),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CreatePostPage(bookId: widget.id),
+                                    ),
+                                  );
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
                                     "Buat Postingan",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
+                                    style: TextStyle(color: Colors.white, fontSize: 18),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),

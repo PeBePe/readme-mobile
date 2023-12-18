@@ -92,18 +92,25 @@ class _EditPostPageState extends State<EditPostPage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16.0),
-          TextField(
-            controller: _contentController,
-            maxLines: 8,
-            decoration: InputDecoration(
-              hintText: 'Content',
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+          Material(
+            elevation: 4.0,
+            shadowColor: Colors.grey[50],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: TextField(
+              controller: _contentController,
+              maxLines: 8,
+              decoration: InputDecoration(
+                hintText: 'Content',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             ),
           ),
           const SizedBox(height: 24.0),

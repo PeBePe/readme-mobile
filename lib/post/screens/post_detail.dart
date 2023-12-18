@@ -10,6 +10,7 @@ import 'package:readme_mobile/post/models/post.dart';
 import 'package:intl/intl.dart';
 import 'package:readme_mobile/post/screens/edit_post.dart';
 import 'package:readme_mobile/readme/screens/menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostDetail extends StatefulWidget {
   final int postId;
@@ -22,11 +23,20 @@ class PostDetail extends StatefulWidget {
 
 class _PostDetailState extends State<PostDetail> {
   late Future<PostItem> postItem;
+  String? loggedInUsername;
 
   @override
   void initState() {
     super.initState();
     postItem = fetchPostById(widget.postId);
+    _getLoggedInUser();
+  }
+
+  void _getLoggedInUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      loggedInUsername = prefs.getString('loggedInUsername');
+    });
   }
 
   Future<PostItem> fetchPostById(int postId) async {
@@ -130,66 +140,80 @@ class _PostDetailState extends State<PostDetail> {
                                 CircleAvatar(
                                   backgroundImage: AssetImage('assets/images/profile.png'),
                                 ),
-                                Text(
-                                  post.user.name,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  '@${post.user.username}',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                IconButton(
-                                  icon: CircleAvatar(
-                                    backgroundColor: Colors.grey.shade200,
-                                    child: Icon(Icons.edit, size: 20, color: Colors.black),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          post.user.name,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          '@${post.user.username}',
+                                          style: TextStyle(color: Colors.grey),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => EditPostPage(postId: widget.postId),
-                                      ),
-                                    );
-                                  },
-                                  tooltip: 'Edit Post',
                                 ),
-                                IconButton(
-                                  icon: CircleAvatar(
-                                    backgroundColor: Colors.grey.shade200,
-                                    child: Icon(Icons.delete, size: 20, color: Colors.red),
+                                if (post.user.username == loggedInUsername) ...[
+                                  IconButton(
+                                    icon: CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                      child: Icon(Icons.edit, size: 20, color: Colors.black),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditPostPage(postId: widget.postId),
+                                        ),
+                                      );
+                                    },
+                                    tooltip: 'Edit Post',
                                   ),
-                                  onPressed: () async {
-                                    final confirmDelete = await showDialog<bool>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Confirm Delete'),
-                                          content: const Text('Are you sure you want to delete this post?'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: const Text('Cancel'),
-                                              onPressed: () => Navigator.of(context).pop(false),
-                                            ),
-                                            TextButton(
-                                              child: const Text('Delete'),
-                                              onPressed: () => Navigator.of(context).pop(true),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ) ?? false;
-                                    if (confirmDelete) {
-                                      bool deletionSuccess = await deletePost(widget.postId, context.read<CookieRequest>());
-                                      if (deletionSuccess) {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => MyHomePage()),
-                                        );
+                                  IconButton(
+                                    icon: CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                      child: Icon(Icons.delete, size: 20, color: Colors.red),
+                                    ),
+                                    onPressed: () async {
+                                      final confirmDelete = await showDialog<bool>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Confirm Delete'),
+                                            content: const Text('Are you sure you want to delete this post?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: const Text('Cancel'),
+                                                onPressed: () => Navigator.of(context).pop(false),
+                                              ),
+                                              TextButton(
+                                                child: const Text('Delete'),
+                                                onPressed: () => Navigator.of(context).pop(true),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ) ?? false;
+                                      if (confirmDelete) {
+                                        bool deletionSuccess = await deletePost(widget.postId, context.read<CookieRequest>());
+                                        if (deletionSuccess) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => MyHomePage()),
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
-                                ),
-                              ],
+                                    },
+                                  ),
+                                ],
+                              ]
                             ),
                             SizedBox(height: 8),
                             Center(

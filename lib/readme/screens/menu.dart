@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:readme_mobile/post/screens/create_post.dart';
 import 'package:readme_mobile/readme/models/home-response.dart';
 import 'package:readme_mobile/readme/widgets/book_home.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
@@ -53,15 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           } else {
             return Scaffold(
-                floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreatePostPage(bookId: 5),
-                  ));
-                },
-                child: const Icon(Icons.add),
-                backgroundColor: Colors.deepOrange,
-              ),
               appBar: AppBar(
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
