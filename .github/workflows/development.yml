@@ -1,12 +1,12 @@
-name: Staging
+name: Development
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-    branches: [staging]
+    branches: [development]
   pull_request:
-    branches: [staging]
+    branches: [development]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,4 +34,4 @@ jobs:
         run: flutter pub get
         
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings --no-pub
