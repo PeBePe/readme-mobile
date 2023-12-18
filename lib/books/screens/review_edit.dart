@@ -43,7 +43,7 @@ class _ReviewEditState extends State<ReviewEdit> {
           padding: EdgeInsetsDirectional.all(20),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Edit Review",
                 style: TextStyle(
                   fontSize: 24,
@@ -60,7 +60,7 @@ class _ReviewEditState extends State<ReviewEdit> {
                     children: [
                       Text(
                         widget.book.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 5),
