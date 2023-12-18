@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/images/logo-small.png
     - assets/images/profile.png
+    - assets/images/profile-big.png
     - assets/images/list_books_header.jpg
     - assets/images/authentication-bg.jpg
 
