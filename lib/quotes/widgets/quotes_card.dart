@@ -11,7 +11,7 @@ class QuoteCard extends StatefulWidget {
   late Quote quote;
   final Function() onEditPressed;
   final Function() onDeletePressed;
-  //final String loggedInUsername;
+  final String loggedInUsername;
   final List<QuotedQuote> quotedQuotes;
 
   QuoteCard({
@@ -19,7 +19,7 @@ class QuoteCard extends StatefulWidget {
     required this.quote,
     required this.onEditPressed,
     required this.onDeletePressed,
-    //required this.loggedInUsername,
+    required this.loggedInUsername,
     required this.quotedQuotes,
   }) : super(key: key);
 
@@ -33,6 +33,7 @@ class _QuoteCardState extends State<QuoteCard> {
     super.initState();
     initializeDateFormatting(); // Inisialisasi format tanggal dan zona waktu lokal
     Intl.defaultLocale = 'id_ID';
+    //print(widget.quotedQuotes);
   }
 
   void _editQuote() async {
@@ -50,24 +51,25 @@ class _QuoteCardState extends State<QuoteCard> {
 
   // Mendapatkan daftar pengguna yang mensitasi quote
   void _showCitedUsersDialog() {
-    var citedQuotes = widget.quotedQuotes.where((q) => q.quoteIdId == widget.quote.id).toList();
+  var citedQuotes = widget.quotedQuotes.where((q) => q.quoteIdId == widget.quote.id).toList();
+  int countCitedUsers = citedQuotes.length; // Menghitung jumlah pengguna
 
-    // Menampilkan daftar pengguna yang mengutip
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Cited by:'),
-          content: setupAlertDialogContainer(citedQuotes),
-        );
-      },
-    );
-  }
+  // Menampilkan jumlah pengguna yang mengutip
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Cited by $countCitedUsers User${countCitedUsers != 1 ? "s" : ""}'), // Judul yang menunjukkan jumlah
+        content: setupAlertDialogContainer(citedQuotes),
+      );
+    },
+  );
+}
 
   Widget setupAlertDialogContainer(List<QuotedQuote> citedQuotes) {
     return Container(
-      height: 300.0, // Sesuaikan sesuai kebutuhan Anda
-      width: 300.0, // Sesuaikan sesuai kebutuhan Anda
+      height: 300.0, 
+      width: 300.0, 
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: citedQuotes.length,
@@ -88,7 +90,7 @@ class _QuoteCardState extends State<QuoteCard> {
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.all(5.0),
-      color: const Color.fromARGB(255, 253, 233, 204),
+      color: Color.fromARGB(255, 255, 249, 239),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -127,8 +129,7 @@ class _QuoteCardState extends State<QuoteCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Tambahkan kondisi untuk tombol Edit Quote
-                //if (quote.username == widget.loggedInUsername)
+                if (quote.username == widget.loggedInUsername)
                   ElevatedButton(
                     onPressed: _editQuote,
                     style: ElevatedButton.styleFrom(
@@ -137,8 +138,7 @@ class _QuoteCardState extends State<QuoteCard> {
                     ),
                     child: const Text('Edit Quote'),
                   ),
-                // Tambahkan kondisi untuk tombol Delete Quote
-                //if (quote.username == widget.loggedInUsername)
+                if (quote.username == widget.loggedInUsername)
                   ElevatedButton(
                     onPressed: widget.onDeletePressed,
                     style: ElevatedButton.styleFrom(

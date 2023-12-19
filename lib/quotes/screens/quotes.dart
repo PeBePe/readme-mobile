@@ -8,6 +8,7 @@ import 'package:readme_mobile/quotes/screens/edit_form.dart';
 import 'package:readme_mobile/quotes/screens/quotes_form.dart';
 import 'package:readme_mobile/quotes/widgets/quotes_card.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuotesPage extends StatefulWidget {
   const QuotesPage({Key? key}) : super(key: key);
@@ -18,13 +19,30 @@ class QuotesPage extends StatefulWidget {
 
 class _QuotesPageState extends State<QuotesPage> {
   final List<Quote> _quotes = [];
-  //late String _loggedInUser;
+  late String _loggedInUser;
+  String _searchQuote = '';
 
   @override
   void initState() {
     super.initState();
-    //_loggedInUser = response['username'];
+    _fetchLoggedInUser();
     _fetchQuotes();
+  }
+
+  // Simpan data username yang sedang login
+  Future<void> _fetchLoggedInUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String loggedInUser = prefs.getString('loggedInUsername') ?? '';
+    setState(() {
+      _loggedInUser = loggedInUser;
+    });
+  }
+
+  // Fungsi untuk melakukan pencarian berdasarkan username atau isi quote
+  void _performSearch(String query) {
+    setState(() {
+      _searchQuote = query;
+    });
   }
 
   Future<void> _fetchQuotes() async {
@@ -80,14 +98,13 @@ Future<void> _navigateAndAddQuote() async {
         createdAt: DateTime.parse(result['createdAt']),
         updatedAt: DateTime.parse(result['updatedAt']),
         quote: result['quote'],
-        userId: 1, // Sesuaikan sesuai dengan user ID Anda, atau dapatkan dari result jika perlu
+        userId: 1, 
         username: result['username'],
       );
       _quotes.add(newQuote);
     });
   }
 }
-
 
   void _editQuote(int index) async {
     final result = await Navigator.push(
@@ -110,6 +127,13 @@ Future<void> _navigateAndAddQuote() async {
 
   @override
   Widget build(BuildContext context) {
+    // Filter berdasarkan username atau isi quote
+    List<Quote> filteredQuotes = _quotes.where((quote) {
+      final usernameMatch = quote.username.toLowerCase().contains(_searchQuote.toLowerCase());
+      final quoteMatch = quote.quote.toLowerCase().contains(_searchQuote.toLowerCase());
+      return usernameMatch || quoteMatch;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quotes'),
@@ -120,20 +144,46 @@ Future<void> _navigateAndAddQuote() async {
       drawer: const LeftDrawer(),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Some Quotes to Cheer Up ${_loggedInUser}'s Day 🥂",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          //Search bar
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              onChanged: _performSearch,
+              decoration: InputDecoration(
+                labelText: 'Cari quotes favoritmu',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+              ),
+            ),
+          ),
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 1.0,
               ),
-              itemCount: _quotes.length,
+              itemCount: filteredQuotes.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
                     _editQuote(index);
                   },
                   child: QuoteCard(
-                    quote: _quotes[index],
+                    quote: filteredQuotes[index],
                     onEditPressed: () {
                       _editQuote(index);
                     },
@@ -141,6 +191,7 @@ Future<void> _navigateAndAddQuote() async {
                       _deleteQuote(index);
                     },
                     quotedQuotes: [],
+                    loggedInUsername: _loggedInUser,
                   ),
                 );
               },
