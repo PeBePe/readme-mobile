@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:readme_mobile/post/screens/create_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:readme_mobile/shop/screens/shop.dart';
 
 class BookDetail extends StatefulWidget {
   final String title;
@@ -129,7 +131,15 @@ class _BookDetailState extends State<BookDetail> {
                               color: const Color.fromARGB(255, 0, 63, 99),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(100.0),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ShopPage(),
+                                    ),
+                                  );
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
@@ -151,7 +161,15 @@ class _BookDetailState extends State<BookDetail> {
                               color: const Color.fromARGB(255, 99, 30, 0),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(100.0),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CreatePostPage(bookId: widget.id),
+                                    ),
+                                  );
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
@@ -163,34 +181,44 @@ class _BookDetailState extends State<BookDetail> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 40),
                     Row(
                       children: [
-                        Text(
-                          book.title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              style: DefaultTextStyle.of(context).style,
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: book.title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 231, 231, 231),
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    child: Text(
+                                      book.category,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 2), // Adjust padding as needed
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 231, 231, 231),
-                            borderRadius: BorderRadius.circular(
-                                50.0), // Set the radius for rounded corners
-                          ),
-                          child: Text(
-                            book.category,
-                          ),
-                        )
                       ],
                     ),
                     const SizedBox(height: 5),
@@ -215,59 +243,102 @@ class _BookDetailState extends State<BookDetail> {
                       endIndent: 0,
                       color: Color.fromARGB(255, 229, 231, 235),
                     ),
-                    Row(
+                    ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       children: [
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Text(style: TextStyle(fontSize: 16), "ISBN"),
-                            SizedBox(height: 5),
-                            Text(style: TextStyle(fontSize: 16), "Penulis"),
-                            SizedBox(height: 5),
-                            Text(style: TextStyle(fontSize: 16), "Penerbit"),
-                            SizedBox(height: 5),
-                            Text(
-                                style: TextStyle(fontSize: 16),
-                                "Tanggal Terbit"),
-                            SizedBox(height: 5),
-                            Text(
-                                style: TextStyle(fontSize: 16),
-                                "Jumlah Halaman"),
-                            SizedBox(height: 5),
-                            Text(style: TextStyle(fontSize: 16), "Bahasa"),
+                            Expanded(
+                              flex: 1,
+                              child: Text("ISBN",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(book.isbn),
+                            ),
                           ],
                         ),
-                        const SizedBox(width: 60),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(height: 4),
+                        Row(
                           children: [
-                            Text(
-                                style: const TextStyle(fontSize: 16),
-                                book.isbn),
-                            const SizedBox(height: 5),
-                            Text(
-                                style: const TextStyle(fontSize: 16),
-                                book.author),
-                            const SizedBox(height: 5),
-                            Text(
-                                style: const TextStyle(fontSize: 16),
-                                book.publisher),
-                            const SizedBox(height: 5),
-                            Text(
-                              DateFormat('dd MMMM yyyy')
-                                  .format(book.publicationDate),
-                              style: const TextStyle(fontSize: 16),
+                            Expanded(
+                              flex: 1,
+                              child: Text("Penulis",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
                             ),
-                            const SizedBox(height: 5),
-                            Text(
-                                style: const TextStyle(fontSize: 16),
-                                book.pageCount.toString()),
-                            const SizedBox(height: 5),
-                            Text(
-                                style: const TextStyle(fontSize: 16),
-                                book.lang == "en" ? "Inggris" : "Indonesia"),
+                            Expanded(
+                              child: Text(book.author),
+                            ),
                           ],
-                        )
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Penerbit",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(book.publisher),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Tanggal Terbit",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(
+                                DateFormat('dd MMMM yyyy')
+                                    .format(book.publicationDate),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Jumlah Halaman",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(book.pageCount.toString()),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text("Bahasa",
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7))),
+                            ),
+                            Expanded(
+                              child: Text(
+                                book.lang.toString() == 'Lang.EN'
+                                    ? 'Inggris'
+                                    : book.lang.toString() == 'Lang.ID'
+                                        ? 'Indonesia'
+                                        : 'Bahasa Lain',
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -360,6 +431,7 @@ class _BookDetailState extends State<BookDetail> {
                             ],
                           ),
                         ),
+                        const SizedBox(height: 10),
                         FutureBuilder(
                           future: fetchBookReview(),
                           builder: (context, snapshot) {
@@ -372,6 +444,8 @@ class _BookDetailState extends State<BookDetail> {
                               return Column(
                                 children: [
                                   ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: snapshot.data!.reviews.length,
                                     itemBuilder: (context, index) {

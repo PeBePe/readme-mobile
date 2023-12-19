@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/post/screens/post_detail.dart';
 import 'package:readme_mobile/readme/models/home-response.dart';
 import 'package:intl/intl.dart';
 
@@ -12,8 +13,9 @@ class PostHome extends StatelessWidget {
   const PostHome(this.posts, {super.key});
 
   @override
-  Widget build(ctx) {
+  Widget build(context) {
     return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: posts.length,
       scrollDirection: Axis.vertical,
@@ -25,7 +27,7 @@ class PostHome extends StatelessWidget {
           border: Border.all(color: Colors.grey, width: 0.2),
           color: Colors.white,
         ),
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(children: [
           Row(
             children: [
@@ -33,13 +35,13 @@ class PostHome extends StatelessWidget {
                 'assets/images/profile.png',
                 width: 40,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 children: [
                   Row(
                     children: [
                       Text(posts[index].user.name),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text("@${posts[index].user.username}"),
@@ -50,8 +52,8 @@ class PostHome extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 15),
-          Container(
+          const SizedBox(height: 15),
+          SizedBox(
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,24 +63,31 @@ class PostHome extends StatelessWidget {
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 GestureDetector(
-                  onTap: () {},
-                  child: Text(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PostDetail(postId: posts[index].id),
+                      ),
+                    );
+                  },
+                  child: const Text(
                     "Tampilkan lebih banyak",
                     style: TextStyle(
-                      color: Color.fromARGB(
-                          255, 0, 99, 93), // Atur warna sesuai kebutuhan
+                      color: Color.fromARGB(255, 0, 99, 93),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(formatDateTime(posts[index].createdAt)),
               ],
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: Column(
@@ -88,7 +97,7 @@ class PostHome extends StatelessWidget {
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                     "${posts[index].book.title} (${posts[index].book.publicationDate.year})",
                     textAlign: TextAlign.center),

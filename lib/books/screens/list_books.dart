@@ -46,147 +46,153 @@ class _ListBooksState extends State<ListBooks> {
       ),
       drawer: const LeftDrawer(),
       body: SingleChildScrollView(
-          child: Column(
-        children: [
-          header(),
-          const SizedBox(height: 20),
-          FutureBuilder(
-            future: fetchBooks(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (!snapshot.hasData) {
-                return const Text("Terjadi kesalahan");
-              } else {
-                return ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: snapshot.data.books.length,
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 10,
-                  ),
-                  itemBuilder: (_, index) {
-                    Book book = snapshot.data.books[index];
-                    return UnconstrainedBox(
-                      child: Container(
-                        padding: const EdgeInsetsDirectional.all(20),
-                        constraints: const BoxConstraints(
-                            maxWidth: 350), // Take full width of its parent
-                        width: double.infinity,
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              book.imageUrl,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              book.title,
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "by ${book.author}",
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 2), // Adjust padding as needed
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 231, 231, 231),
-                                borderRadius: BorderRadius.circular(
-                                    50.0), // Set the radius for rounded corners
+        child: Column(
+          children: [
+            header(),
+            const SizedBox(height: 20),
+            FutureBuilder(
+              future: fetchBooks(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (!snapshot.hasData) {
+                  return const Text("Terjadi kesalahan");
+                } else {
+                  return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: snapshot.data.books.length,
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10,
+                    ),
+                    itemBuilder: (_, index) {
+                      Book book = snapshot.data.books[index];
+                      return UnconstrainedBox(
+                        child: Container(
+                          padding: const EdgeInsetsDirectional.all(20),
+                          constraints: const BoxConstraints(
+                              maxWidth: 350), // Take full width of its parent
+                          width: double.infinity,
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                book.imageUrl,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
                               ),
-                              child: Text(
-                                book.category,
+                              const SizedBox(height: 10),
+                              Text(
+                                book.title,
+                                style: const TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              book.description,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              "${book.reviewCount} Review",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 133, 77, 14),
+                              Text(
+                                "by ${book.author}",
+                                style: const TextStyle(fontSize: 18),
                               ),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 2,
-                                        blurRadius: 5,
-                                        offset: const Offset(0,
-                                            2), // changes the shadow position
-                                      ),
-                                    ],
-                                    color: Colors.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(100)),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                        Icons.bookmark_add_outlined,
-                                        color:
-                                            Color.fromARGB(255, 133, 77, 14)),
-                                    onPressed: () {
-                                      // Add your bookmark button logic here
-                                    },
-                                  ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 2), // Adjust padding as needed
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 231, 231, 231),
+                                  borderRadius: BorderRadius.circular(
+                                      50.0), // Set the radius for rounded corners
                                 ),
-                                Material(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  elevation: 2.0,
-                                  color: const Color.fromARGB(255, 133, 77, 14),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              BookDetail(book.title, book.id),
+                                child: Text(
+                                  book.category,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                book.description,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "${book.reviewCount} Review",
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 133, 77, 14),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
+                                          offset: const Offset(0,
+                                              2), // changes the shadow position
                                         ),
-                                      );
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 2),
-                                      child: Text(
-                                        "Lihat Detail",
-                                        style: TextStyle(color: Colors.white),
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(100)),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                          Icons.bookmark_add_outlined,
+                                          color:
+                                              Color.fromARGB(255, 133, 77, 14)),
+                                      onPressed: () {
+                                        // Add your bookmark button logic here
+                                      },
+                                    ),
+                                  ),
+                                  Material(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    elevation: 2.0,
+                                    color:
+                                        const Color.fromARGB(255, 133, 77, 14),
+                                    child: InkWell(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                BookDetail(book.title, book.id),
+                                          ),
+                                        );
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 2),
+                                        child: Text(
+                                          "Lihat Detail",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            )
-                            // Add more widgets as needed
-                          ],
+                                ],
+                              )
+                              // Add more widgets as needed
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-          )
-        ],
-      )),
+                      );
+                    },
+                  );
+                }
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -208,7 +214,8 @@ class _ListBooksState extends State<ListBooks> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            "Temukan banyak buku menarik disini!",
+            "Temukan banyak buku menarik di sini!",
+            textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           ),
@@ -254,7 +261,7 @@ class _ListBooksState extends State<ListBooks> {
                       ),
                       backgroundColor: const Color.fromARGB(255, 133, 77, 14),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 22.5, horizontal: 25),
+                          vertical: 14, horizontal: 25),
                     ),
                     child: const Text(
                       'Cari',

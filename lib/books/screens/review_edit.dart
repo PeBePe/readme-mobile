@@ -40,10 +40,10 @@ class _ReviewEditState extends State<ReviewEdit> {
         scrolledUnderElevation: 0,
       ),
       body: SingleChildScrollView(
-          padding: EdgeInsetsDirectional.all(20),
+          padding: const EdgeInsetsDirectional.all(20),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Edit Review",
                 style: TextStyle(
                   fontSize: 24,
@@ -55,33 +55,35 @@ class _ReviewEditState extends State<ReviewEdit> {
                 children: [
                   Image.network(widget.book.imageUrl),
                   const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.book.title,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        "By ${widget.book.author}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(DateFormat('d MMMM y')
-                          .format(widget.book.publicationDate)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.book.title,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          "By ${widget.book.author}",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(DateFormat('d MMMM y')
+                            .format(widget.book.publicationDate)),
+                      ],
+                    ),
                   )
                 ],
               ),
               const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: Color.fromARGB(255, 229, 231, 235),
+                    color: const Color.fromARGB(255, 229, 231, 235),
                     width: 0.8,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -129,6 +131,7 @@ class _ReviewEditState extends State<ReviewEdit> {
                           // Handle error message
                           String errorMessage = response['message'];
                           // Tampilkan pesan kesalahan
+                          // ignore: use_build_context_synchronously
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -147,6 +150,7 @@ class _ReviewEditState extends State<ReviewEdit> {
                             },
                           );
                         } else {
+                          // ignore: use_build_context_synchronously
                           Navigator.of(ctx).pop();
                         }
                       },
