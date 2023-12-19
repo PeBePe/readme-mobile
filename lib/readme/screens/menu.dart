@@ -34,45 +34,43 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(context) {
     final request = context.watch<CookieRequest>();
-    return FutureBuilder(
-      future: fetchHome(request),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.data == null) {
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          if (!snapshot.hasData) {
-            return const Column(
-              children: [
-                Text(
-                  "Terjadi kesalahan saat mengambil data",
-                  style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
-                ),
-                SizedBox(height: 8),
-              ],
-            );
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo-small.png',
+              width: 50,
+            ),
+            const SizedBox(width: 8),
+            const Text("ReadMe"),
+          ],
+        ),
+        backgroundColor: const Color.fromARGB(255, 250, 239, 223),
+        centerTitle: true,
+        scrolledUnderElevation: 0,
+      ),
+      backgroundColor: const Color.fromARGB(255, 249, 247, 244),
+      drawer: const LeftDrawer(),
+      body: FutureBuilder(
+        future: fetchHome(request),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator());
           } else {
-            return Scaffold(
-              appBar: AppBar(
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/images/logo-small.png',
-                      width: 50,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text("ReadMe"),
-                  ],
-                ),
-                backgroundColor: const Color.fromARGB(255, 250, 239, 223),
-                centerTitle: true,
-                scrolledUnderElevation: 0,
-                // actions: [
-                //   Padding(padding: EdgeInsets.only(right: 20), child: Text("1000"))
-                // ],
-              ),
-              backgroundColor: const Color.fromARGB(255, 249, 247, 244),
-              body: SingleChildScrollView(
+            if (!snapshot.hasData) {
+              return const Column(
+                children: [
+                  Text(
+                    "Terjadi kesalahan saat mengambil data",
+                    style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              );
+            } else {
+              return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(
@@ -190,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         endIndent: 0,
                         color: Color.fromARGB(255, 229, 231, 235),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -205,12 +203,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-              ),
-              drawer: const LeftDrawer(),
-            );
+              );
+            }
           }
-        }
-      },
+        },
+      ),
     );
   }
 }

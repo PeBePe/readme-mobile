@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Masuk",
                   style: TextStyle(
                       fontSize: 34,
@@ -101,13 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                     String username = _usernameController.text;
                     String password = _passwordController.text;
 
-                // Cek kredensial
-                // Untuk menyambungkan Android emulator dengan Django pada localhost,
-                // gunakan URL http://10.0.2.2/
-                final response = await request.login("$baseUrl/auth/login", {
-                  'username': username,
-                  'password': password,
-                });
+                    // Cek kredensial
+                    // Untuk menyambungkan Android emulator dengan Django pada localhost,
+                    // gunakan URL http://10.0.2.2/
+                    final response =
+                        await request.login("$baseUrl/auth/login", {
+                      'username': username,
+                      'password': password,
+                    });
 
                     if (request.loggedIn) {
                       String message = response['message'];
@@ -119,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                       // ignore: use_build_context_synchronously
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => const MyHomePage()),
                       );
                       // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context)
