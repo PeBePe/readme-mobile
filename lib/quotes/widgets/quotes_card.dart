@@ -1,21 +1,26 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/edit_form.dart';
+import 'package:http/http.dart' as http;
 
 class QuoteCard extends StatefulWidget {
-  late Product quote;
+  late Quote quote;
   final Function() onEditPressed;
   final Function() onDeletePressed;
-  final int currentUserID; // Tambahkan properti untuk menyimpan ID pengguna yang saat ini masuk
+  //final String loggedInUsername;
+  final List<QuotedQuote> quotedQuotes;
 
   QuoteCard({
     Key? key,
     required this.quote,
     required this.onEditPressed,
     required this.onDeletePressed,
-    required this.currentUserID,
+    //required this.loggedInUsername,
+    required this.quotedQuotes,
   }) : super(key: key);
 
   @override
@@ -43,12 +48,42 @@ class _QuoteCardState extends State<QuoteCard> {
     }
   }
 
+  // Mendapatkan daftar pengguna yang mensitasi quote
+  void _showCitedUsersDialog() {
+    var citedQuotes = widget.quotedQuotes.where((q) => q.quoteIdId == widget.quote.id).toList();
+
+    // Menampilkan daftar pengguna yang mengutip
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cited by:'),
+          content: setupAlertDialogContainer(citedQuotes),
+        );
+      },
+    );
+  }
+
+  Widget setupAlertDialogContainer(List<QuotedQuote> citedQuotes) {
+    return Container(
+      height: 300.0, // Sesuaikan sesuai kebutuhan Anda
+      width: 300.0, // Sesuaikan sesuai kebutuhan Anda
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: citedQuotes.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            //title: Text(users[index]),
+            title: Text("User ID: ${citedQuotes[index].userIdId}"),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Fields fields = widget.quote.fields;
-
-    // Periksa apakah pengguna yang membuat quote sesuai dengan pengguna yang saat ini masuk
-    final bool isCurrentUserQuote = fields.user == widget.currentUserID;
+    Quote quote = widget.quote;
 
     return Card(
       elevation: 4.0,
@@ -60,14 +95,14 @@ class _QuoteCardState extends State<QuoteCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              fields.username,
+              quote.username,
               style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              '"' + fields.quote + '"',
+              '"' + quote.quote + '"',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 15.0,
@@ -75,42 +110,54 @@ class _QuoteCardState extends State<QuoteCard> {
               ),
             ),
             Text(
-              'Created Date: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(fields.createdAt. toLocal()),
+              'Created Date: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(quote.createdAt.toLocal()),
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey,
               ),
             ),
             Text(
-              'Updated at: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(fields.updatedAt.toLocal()),
+              'Updated at: ' + DateFormat('dd MMM yyyy HH:mm', 'id_ID').format(quote.updatedAt.toLocal()),
               style: const TextStyle(
                 fontSize: 12.0,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 10.0), 
-            if (isCurrentUserQuote) // Hanya tampilkan tombol jika pengguna yang membuat quote sama dengan pengguna saat ini
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Tambahkan kondisi untuk tombol Edit Quote
+                //if (quote.username == widget.loggedInUsername)
                   ElevatedButton(
                     onPressed: _editQuote,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Edit Quotes'),
+                    child: const Text('Edit Quote'),
                   ),
+                // Tambahkan kondisi untuk tombol Delete Quote
+                //if (quote.username == widget.loggedInUsername)
                   ElevatedButton(
                     onPressed: widget.onDeletePressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.pinkAccent,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Delete Quotes'),
+                    child: const Text('Delete Quote'),
                   ),
-                ],
+              ],
+            ),
+            SizedBox(height: 8.0),
+            ElevatedButton(
+              onPressed: _showCitedUsersDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 239, 189, 95),
+                foregroundColor: Colors.white,
               ),
+              child: const Text('Cited Quote'),
+            )
           ],
         ),
       ),

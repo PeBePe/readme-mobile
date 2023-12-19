@@ -17,22 +17,25 @@ class QuotesPage extends StatefulWidget {
 }
 
 class _QuotesPageState extends State<QuotesPage> {
-  final List<Product> _quotes = [];
+  final List<Quote> _quotes = [];
+  //late String _loggedInUser;
 
   @override
   void initState() {
     super.initState();
+    //_loggedInUser = response['username'];
     _fetchQuotes();
   }
 
   Future<void> _fetchQuotes() async {
     final url = Uri.parse("$baseUrl/quotes/");
-    
+
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final List<Product> quotes = parseQuotes(response.body);
+        final List<Quote> quotes = parseQuotes(response.body);
+
         setState(() {
           _quotes.clear();
           _quotes.addAll(quotes);
@@ -45,55 +48,48 @@ class _QuotesPageState extends State<QuotesPage> {
     }
   }
 
-  List<Product> parseQuotes(String responseBody) {
+  List<Quote> parseQuotes(String responseBody) {
   final Map<String, dynamic> jsonData = jsonDecode(responseBody);
 
-  // Mengambil data quotes dari dalam key "data"
   final List<dynamic> quotesData = jsonData['data']['quotes'];
 
-  // Mengonversi data quotes menjadi objek Product
-  List<Product> quotesList = quotesData.map<Product>((json) {
-    return Product(
-      model: 'quotes_model',
-      pk: json['id'],
-      fields: Fields(
-        createdAt: DateTime.parse(json['created_at']),
-        updatedAt: DateTime.parse(json['updated_at']),
-        quote: json['quote'],
-        user: json['user_id'],
-        username: jsonData['data']['name'], // Mengambil username dari key "name"
-      ),
+  List<Quote> quotesList = quotesData.map<Quote>((json) {
+    return Quote(
+      id: json['id'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+      quote: json['quote'],
+      userId: json['user_id'],
+      username: json['username'],
     );
   }).toList();
 
   return quotesList;
 }
 
-  // ... (metode _navigateAndAddQuote, _editQuote, _deleteQuote, build, dll)
-  Future<void> _navigateAndAddQuote() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const QuotesFormPage()),
-    );
+Future<void> _navigateAndAddQuote() async {
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+  );
 
-    if (result != null) {
-      setState(() {
-        _quotes.add(Product(
-          model: 'quotes_model', 
-          pk: _quotes.length + 1,
-          fields: Fields(
-            createdAt: result['date'],
-            updatedAt: result['date'],
-            quote: result['quote'],
-            user: 1, 
-            username: result['username'],
-          ),
-        ));
-      });
-    }
+  if (result != null) {
+    setState(() {
+      final newQuote = Quote(
+        id: int.parse(result['id']), // Konversi ID dari string ke int
+        createdAt: DateTime.parse(result['createdAt']),
+        updatedAt: DateTime.parse(result['updatedAt']),
+        quote: result['quote'],
+        userId: 1, // Sesuaikan sesuai dengan user ID Anda, atau dapatkan dari result jika perlu
+        username: result['username'],
+      );
+      _quotes.add(newQuote);
+    });
   }
+}
 
-    void _editQuote(int index) async {
+
+  void _editQuote(int index) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => QuotesEditPage(quote: _quotes[index])),
@@ -101,7 +97,6 @@ class _QuotesPageState extends State<QuotesPage> {
 
     if (result != null) {
       setState(() {
-        // Update quote di list
         _quotes[index] = result;
       });
     }
@@ -115,8 +110,6 @@ class _QuotesPageState extends State<QuotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ... (Bagian build yang sudah ada)
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quotes'),
@@ -147,7 +140,7 @@ class _QuotesPageState extends State<QuotesPage> {
                     onDeletePressed: () {
                       _deleteQuote(index);
                     },
-                    currentUserID: _quotes[index].fields.user,
+                    quotedQuotes: [],
                   ),
                 );
               },

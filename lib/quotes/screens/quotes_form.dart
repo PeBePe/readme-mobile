@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:readme_mobile/quotes/screens/quotes.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class QuotesFormPage extends StatefulWidget {
   const QuotesFormPage({Key? key}) : super(key: key);
@@ -19,15 +20,18 @@ class _QuotesFormPageState extends State<QuotesFormPage> {
   final _dateCreated = DateTime.now();
   final _dateUpdated = DateTime.now();
 
-  void _submitQuote() {
+void _submitQuote() {
+  String uniqueId = DateTime.now().millisecondsSinceEpoch.toString(); // Menghasilkan ID unik menggunakan timestamp
+
   // Kirim data kembali ke QuotesPage
   Navigator.pop(context, {
+    'id': uniqueId,
     'username': _username,
     'quote': _quote,
-    'date': DateTime.now(),
+    'createdAt': DateTime.now().toString(),
+    'updatedAt': DateTime.now().toString(),
   });
 }
-
 
   @override
   Widget build(BuildContext context) {

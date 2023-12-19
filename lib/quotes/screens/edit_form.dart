@@ -7,7 +7,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 class QuotesEditPage extends StatefulWidget {
-  final Product quote;
+  final Quote quote;
 
   const QuotesEditPage({Key? key, required this.quote}) : super(key: key);
 
@@ -21,21 +21,17 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
   @override
   void initState() {
     super.initState();
-    _editedQuote = widget.quote.fields.quote;
+    _editedQuote = widget.quote.quote;
   }
 
   void _submitEdit() {
-    // Kirim data kembali ke QuotesPage dengan quote yang telah diubah
-    final editedQuote = Product(
-      model: widget.quote.model,
-      pk: widget.quote.pk,
-      fields: Fields(
-        createdAt: widget.quote.fields.createdAt,
-        updatedAt: DateTime.now(), 
-        quote: _editedQuote, // Mengubah isi quote
-        user: widget.quote.fields.user,
-        username: widget.quote.fields.username,
-      ),
+    final editedQuote = Quote(
+      id: widget.quote.id,
+      createdAt: widget.quote.createdAt,
+      updatedAt: DateTime.now(),
+      quote: _editedQuote,
+      userId: widget.quote.userId,
+      username: widget.quote.username,
     );
 
     Navigator.pop(context, editedQuote);
