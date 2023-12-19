@@ -57,7 +57,7 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
                 initialValue: _editedQuote,
                 decoration: InputDecoration(
                   hintText: "Isi quotes yang ingin kamu ubah",
-                  labelText: "Quotes",
+                  labelText: "Edit Quote",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
@@ -71,7 +71,11 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitEdit,
-                child: const Text('Submit Edited Quote'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Update Quotes'),
               ),
             ],
           ),

@@ -52,9 +52,8 @@ class _ShopItemCardState extends State<ShopItemCard> {
                 },
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 220,
-                      width: 150,
+                    AspectRatio(
+                      aspectRatio: 150 / 220,
                       child: Image.network(widget.shopItem.book.imageUrl,
                           fit: BoxFit.fill),
                     ),
@@ -63,7 +62,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                       "${widget.shopItem.book.title} (${widget.shopItem.book.publicationDate.year})",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -85,7 +84,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                       child: Text(
                         '${widget.shopItem.amount} Available',
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: Colors.white,
                         ),
                         textAlign: TextAlign.center,
@@ -106,7 +105,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                         Text(
                           '${widget.shopItem.price}',
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -148,7 +147,7 @@ class _ShopItemCardState extends State<ShopItemCard> {
                         ? 'Add to Cart'
                         : 'Out of Stock', // change the text when the button is disabled
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       color: Colors.white,
                     ),
                   ),

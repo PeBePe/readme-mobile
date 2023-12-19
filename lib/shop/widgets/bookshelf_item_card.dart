@@ -51,9 +51,8 @@ class _BookshelfItemCardState extends State<BookshelfItemCard> {
                 },
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 220,
-                      width: 150,
+                    AspectRatio(
+                      aspectRatio: 150 / 220,
                       child: Image.network(
                           widget.bookshelfItem.item.book.imageUrl,
                           fit: BoxFit.fill),
@@ -63,7 +62,7 @@ class _BookshelfItemCardState extends State<BookshelfItemCard> {
                       "${widget.bookshelfItem.item.book.title} (${widget.bookshelfItem.item.book.publicationDate.year})",
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -75,7 +74,7 @@ class _BookshelfItemCardState extends State<BookshelfItemCard> {
               Text(
                 'Amount: ${widget.bookshelfItem.amount}',
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -87,13 +86,13 @@ class _BookshelfItemCardState extends State<BookshelfItemCard> {
                   const Icon(
                     Icons.stars,
                     color: Color(0xfffbbd61),
-                    size: 28,
+                    size: 26,
                   ),
                   const SizedBox(width: 2),
                   Text(
                     '${widget.bookshelfItem.item.price}',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
