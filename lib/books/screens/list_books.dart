@@ -5,6 +5,7 @@ import 'package:readme_mobile/books/screens/book_detail.dart';
 import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:readme_mobile/wishlist/screens/addWishlist.dart';
 
 class ListBooks extends StatefulWidget {
   const ListBooks({super.key});
@@ -145,6 +146,12 @@ class _ListBooksState extends State<ListBooks> {
                                             Color.fromARGB(255, 133, 77, 14)),
                                     onPressed: () {
                                       // Add your bookmark button logic here
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddWishlistPage(book.id)),
+                                      );
                                     },
                                   ),
                                 ),
