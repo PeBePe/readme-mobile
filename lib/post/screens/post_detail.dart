@@ -270,6 +270,17 @@ class _PostDetailState extends State<PostDetail> {
                                 fontSize: 14,
                               ),
                             ),
+                            if (post.createdAt != post.updatedAt)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(
+                                'Updated at: ${formatDateTime(post.updatedAt)}',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
