@@ -11,6 +11,8 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:readme_mobile/post/screens/create_post.dart';
+import 'package:readme_mobile/wishlist/screens/addWishlist.dart';
+import 'package:readme_mobile/wishlist/screens/wishlist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:readme_mobile/shop/screens/shop.dart';
 
@@ -109,7 +111,14 @@ class _BookDetailState extends State<BookDetail> {
                               color: const Color.fromARGB(255, 0, 99, 93),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(100.0),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            AddWishlistPage(book.id)),
+                                  );
+                                },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
