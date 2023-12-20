@@ -32,6 +32,8 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
       quote: _editedQuote,
       userId: widget.quote.userId,
       username: widget.quote.username,
+      citedCount: widget.quote.citedCount,
+      citedUsers: widget.quote.citedUsers,
     );
 
     Navigator.pop(context, editedQuote);

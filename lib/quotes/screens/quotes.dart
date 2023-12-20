@@ -79,28 +79,24 @@ class _QuotesPageState extends State<QuotesPage> {
       quote: json['quote'],
       userId: json['user_id'],
       username: json['username'],
+      citedCount: json['cited_count'],
+      citedUsers: (json['cited_users'] as List)
+          .map((citedUserJson) => CitedUser.fromJson(citedUserJson))
+          .toList(),
     );
   }).toList();
 
   return quotesList;
 }
 
-Future<void> _navigateAndAddQuote() async {
-  final result = await Navigator.push(
+  Future<void> _navigateAndAddQuote() async {
+  final newQuote = await Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => const QuotesFormPage()),
+    MaterialPageRoute(builder: (context) => QuotesFormPage(loggedInUsername: _loggedInUser, existingQuotes: _quotes)),
   );
 
-  if (result != null) {
+  if (newQuote != null) {
     setState(() {
-      final newQuote = Quote(
-        id: int.parse(result['id']), // Konversi ID dari string ke int
-        createdAt: DateTime.parse(result['createdAt']),
-        updatedAt: DateTime.parse(result['updatedAt']),
-        quote: result['quote'],
-        userId: 1, 
-        username: result['username'],
-      );
       _quotes.add(newQuote);
     });
   }

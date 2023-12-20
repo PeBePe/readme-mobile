@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/quotes.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class QuotesFormPage extends StatefulWidget {
-  const QuotesFormPage({Key? key}) : super(key: key);
+  const QuotesFormPage({Key? key, required this.loggedInUsername, required this.existingQuotes}) : super(key: key);
+  final String loggedInUsername;
+  final List<Quote> existingQuotes;
 
   @override
   State<QuotesFormPage> createState() => _QuotesFormPageState();
@@ -15,22 +18,35 @@ class QuotesFormPage extends StatefulWidget {
 
 class _QuotesFormPageState extends State<QuotesFormPage> {
   final _formKey = GlobalKey<FormState>();
-  String _username = "";
   String _quote = "";
   final _dateCreated = DateTime.now();
   final _dateUpdated = DateTime.now();
 
-void _submitQuote() {
-  String uniqueId = DateTime.now().millisecondsSinceEpoch.toString(); // Menghasilkan ID unik menggunakan timestamp
+  void _submitQuote() {
+  if (_formKey.currentState!.validate()) {
+    // Periksa apakah sudah ada quote dengan username yang sama
+    bool quoteExists = widget.existingQuotes.any((quote) => quote.username == widget.loggedInUsername);
 
-  // Kirim data kembali ke QuotesPage
-  Navigator.pop(context, {
-    'id': uniqueId,
-    'username': _username,
-    'quote': _quote,
-    'createdAt': DateTime.now().toString(),
-    'updatedAt': DateTime.now().toString(),
-  });
+    if (quoteExists) {
+      // Tampilkan Snackbar jika quote sudah ada
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Anda sudah pernah membuat quote, satu akun hanya boleh membuat satu quote saja')),
+      );
+    } else {
+      // Jika belum ada, tambahkan quote baru
+      final newQuote = Quote(
+        id: DateTime.now().millisecondsSinceEpoch, // Menghasilkan ID unik
+        createdAt: _dateCreated,
+        updatedAt: _dateUpdated,
+        quote: _quote,
+        userId: 1, 
+        username: widget.loggedInUsername,
+        citedCount: 0,
+        citedUsers: [],
+      );
+      Navigator.pop(context, newQuote);
+    }
+  }
 }
 
   @override
@@ -57,29 +73,6 @@ void _submitQuote() {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Isi username sesuai dengan nama akun kamu",
-                    labelText: "Username Pengguna",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      _username = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "Username tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
                     hintText: "Isi quotes yang ingin kamu tulis",
                     labelText: "Quotes",
                     border: OutlineInputBorder(
@@ -102,11 +95,7 @@ void _submitQuote() {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _submitQuote();
-                    }
-                  },
+                  onPressed: _submitQuote,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
