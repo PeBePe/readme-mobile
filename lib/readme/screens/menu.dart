@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/books/screens/list_books.dart';
 import 'package:readme_mobile/readme/models/home-response.dart';
 import 'package:readme_mobile/readme/widgets/book_home.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
@@ -111,7 +112,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     right: 8.0, bottom: 8),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    // Handle button press
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ListBooks()),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.black,
