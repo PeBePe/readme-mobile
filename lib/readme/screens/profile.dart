@@ -118,14 +118,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 Text(
                                   profileData.name,
                                   style: const TextStyle(
-                                      fontSize: 32,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
                                   "@${profileData.username}",
                                   style: const TextStyle(
-                                      fontSize: 32,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 )
@@ -293,71 +293,90 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             profileData.reviews.isNotEmpty
                                 ? ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: profileData.reviews.length,
                                     itemBuilder: (context, index) {
                                       var review = profileData.reviews[index];
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 229, 231, 235),
-                                          ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10)),
-                                          color: Colors.white,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: const Color.fromARGB(
+                                                    255, 229, 231, 235),
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10)),
+                                              color: Colors.white,
+                                            ),
+                                            padding: const EdgeInsets.all(20),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Image.network(
-                                                    review.book.imageUrl,
-                                                    width: 80),
-                                                const SizedBox(width: 10),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                Row(
                                                   children: [
-                                                    Text(
-                                                      review.book.title,
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w700,
+                                                    Image.network(
+                                                        review.book.imageUrl,
+                                                        width: 80),
+                                                    const SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            review.book.title,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "By ${review.book.author}",
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                    'dd MMMM yyyy')
+                                                                .format(review
+                                                                    .book
+                                                                    .publicationDate),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      "By ${review.book.author}",
-                                                      style: const TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                    Text(
-                                                      DateFormat('dd MMMM yyyy')
-                                                          .format(review.book
-                                                              .publicationDate),
-                                                      style: const TextStyle(
-                                                          fontSize: 16),
                                                     ),
                                                   ],
                                                 ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                  review.content,
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                  "Terakhir diupdate ${DateFormat('dd MMMM yyyy HH:mm').format(review.updatedAt)}",
+                                                )
                                               ],
                                             ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              review.content,
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              "Terakhir diupdate ${DateFormat('dd MMMM yyyy HH:mm').format(review.updatedAt)}",
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                        ],
                                       );
                                     },
                                   )

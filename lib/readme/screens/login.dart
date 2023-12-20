@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Masuk",
                   style: TextStyle(
                       fontSize: 34,
@@ -120,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                       // ignore: use_build_context_synchronously
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => const MyHomePage()),
                       );
                       // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context)
