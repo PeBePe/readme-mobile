@@ -5,6 +5,7 @@ import 'package:readme_mobile/books/screens/book_detail.dart';
 import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/readme/widgets/left_drawer.dart';
 import 'package:http/http.dart' as http;
+import 'package:readme_mobile/wishlist/screens/addWishlist.dart';
 
 class ListBooks extends StatefulWidget {
   const ListBooks({super.key});
@@ -19,7 +20,7 @@ class _ListBooksState extends State<ListBooks> {
   String query = '';
 
   Future<BookResponse> fetchBooks() async {
-    var url = Uri.parse('$baseUrl/books');
+    var url = Uri.parse('$baseUrl/books?q=$query');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -58,6 +59,9 @@ class _ListBooksState extends State<ListBooks> {
                 } else if (!snapshot.hasData) {
                   return const Text("Terjadi kesalahan");
                 } else {
+                  if (snapshot.data.books.length == 0) {
+                    return Text("Buku tidak ditemukan!");
+                  }
                   return ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -147,7 +151,12 @@ class _ListBooksState extends State<ListBooks> {
                                           color:
                                               Color.fromARGB(255, 133, 77, 14)),
                                       onPressed: () {
-                                        // Add your bookmark button logic here
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddWishlistPage(book.id)),
+                                        );
                                       },
                                     ),
                                   ),
@@ -251,7 +260,9 @@ class _ListBooksState extends State<ListBooks> {
                   ),
                   const SizedBox(width: 8.0), // Adjust spacing as needed
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {});
+                    },
                     style: TextButton.styleFrom(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -271,58 +282,58 @@ class _ListBooksState extends State<ListBooks> {
                 ],
               ),
               const SizedBox(height: 15),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white, // Set the background color
-                    ),
-                    child: DropdownButton<String>(
-                      value: selectedSearchCriteria,
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            selectedSearchCriteria = newValue;
-                          });
-                        }
-                      },
-                      items: <String>['judul', 'penulis', 'penerbit']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white, // Set the background color
-                    ),
-                    child: DropdownButton<String>(
-                      value: selectedCategory,
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            selectedCategory = newValue;
-                          });
-                        }
-                      },
-                      items: <String>['Semua Kategori', 'Kategori 1']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              )
+              // Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     Container(
+              //       padding: const EdgeInsets.symmetric(horizontal: 16),
+              //       decoration: const BoxDecoration(
+              //         color: Colors.white, // Set the background color
+              //       ),
+              //       child: DropdownButton<String>(
+              //         value: selectedSearchCriteria,
+              //         onChanged: (String? newValue) {
+              //           if (newValue != null) {
+              //             setState(() {
+              //               selectedSearchCriteria = newValue;
+              //             });
+              //           }
+              //         },
+              //         items: <String>['judul', 'penulis', 'penerbit']
+              //             .map<DropdownMenuItem<String>>((String value) {
+              //           return DropdownMenuItem<String>(
+              //             value: value,
+              //             child: Text(value),
+              //           );
+              //         }).toList(),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 5),
+              //     Container(
+              //       padding: const EdgeInsets.symmetric(horizontal: 16),
+              //       decoration: const BoxDecoration(
+              //         color: Colors.white, // Set the background color
+              //       ),
+              //       child: DropdownButton<String>(
+              //         value: selectedCategory,
+              //         onChanged: (String? newValue) {
+              //           if (newValue != null) {
+              //             setState(() {
+              //               selectedCategory = newValue;
+              //             });
+              //           }
+              //         },
+              //         items: <String>['Semua Kategori', 'Kategori 1']
+              //             .map<DropdownMenuItem<String>>((String value) {
+              //           return DropdownMenuItem<String>(
+              //             value: value,
+              //             child: Text(value),
+              //           );
+              //         }).toList(),
+              //       ),
+              //     ),
+              //   ],
+              // )
             ],
           ),
         ],
