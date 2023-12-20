@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:readme_mobile/constants/constants.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/quotes.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -24,23 +24,63 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
     _editedQuote = widget.quote.quote;
   }
 
-  void _submitEdit() {
-    final editedQuote = Quote(
-      id: widget.quote.id,
-      createdAt: widget.quote.createdAt,
-      updatedAt: DateTime.now(),
-      quote: _editedQuote,
-      userId: widget.quote.userId,
-      username: widget.quote.username,
-      citedCount: widget.quote.citedCount,
-      citedUsers: widget.quote.citedUsers,
-    );
+  Future<void> _submitEdit(request) async {
+    // final editedQuote = Quote(
+    //   id: widget.quote.id,
+    //   createdAt: widget.quote.createdAt,
+    //   updatedAt: DateTime.now(),
+    //   quote: _editedQuote,
+    //   userId: widget.quote.userId,
+    //   username: widget.quote.username,
+    //   citedCount: widget.quote.citedCount,
+    //   citedUsers: widget.quote.citedUsers,
+    // );
 
-    Navigator.pop(context, editedQuote);
+    final response = await request.post(
+        '$baseUrl/quotes/edit-quote/${widget.quote.id}/',
+        {"quote": _editedQuote});
+    print(response);
+
+    if (response["status"]) {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Berhasil mengedit quote!'),
+          content: Text(response['message']),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Gagal mengedit quote!'),
+          content: Text(response['message']),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
 
     return Scaffold(
       appBar: AppBar(
@@ -72,7 +112,9 @@ class _QuotesEditPageState extends State<QuotesEditPage> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _submitEdit,
+                onPressed: () async {
+                  await _submitEdit(request);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
