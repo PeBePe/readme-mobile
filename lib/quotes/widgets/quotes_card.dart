@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:readme_mobile/quotes/models/quotes_item.dart';
 import 'package:readme_mobile/quotes/screens/edit_form.dart';
-import 'package:http/http.dart' as http;
 
 class QuoteCard extends StatefulWidget {
   late Quote quote;
@@ -33,7 +32,6 @@ class _QuoteCardState extends State<QuoteCard> {
     super.initState();
     initializeDateFormatting(); // Inisialisasi format tanggal dan zona waktu lokal
     Intl.defaultLocale = 'id_ID';
-    //print(widget.quotedQuotes);
   }
 
   void _editQuote() async {
@@ -49,40 +47,50 @@ class _QuoteCardState extends State<QuoteCard> {
     }
   }
 
-  // Mendapatkan daftar pengguna yang mensitasi quote
   void _showCitedUsersDialog() {
-  var citedQuotes = widget.quotedQuotes.where((q) => q.quoteIdId == widget.quote.id).toList();
-  int countCitedUsers = citedQuotes.length; // Menghitung jumlah pengguna
+  // Mengambil daftar pengguna yang mengutip quote
+  List<CitedUser> citedUsers = widget.quote.citedUsers;
+  int countCitedUsers = widget.quote.citedCount;
 
   // Menampilkan jumlah pengguna yang mengutip
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Cited by $countCitedUsers User${countCitedUsers != 1 ? "s" : ""}'), // Judul yang menunjukkan jumlah
-        content: setupAlertDialogContainer(citedQuotes),
+        title: Text('Cited by $countCitedUsers User${countCitedUsers != 1 ? "s" : ""}'),
+        content: setupAlertDialogContainer(citedUsers),
       );
     },
   );
 }
 
-  Widget setupAlertDialogContainer(List<QuotedQuote> citedQuotes) {
-    return Container(
-      height: 300.0, 
-      width: 300.0, 
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: citedQuotes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            //title: Text(users[index]),
-            title: Text("User ID: ${citedQuotes[index].userIdId}"),
-          );
-        },
-      ),
-    );
-  }
-
+Widget setupAlertDialogContainer(List<CitedUser> citedUsers) {
+  return Container(
+    height: 300.0,
+    width: 300.0,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: citedUsers.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text("🙈 ${citedUsers[index].username}"),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(16.0), // Sesuaikan padding dengan gaya yang Anda inginkan
+          child: Text("Go to our website 'readme.up.railway.app' if u also want to cite this user 😁"),
+        ),
+      ],
+    ),
+  );
+}
+ 
   @override
   Widget build(BuildContext context) {
     Quote quote = widget.quote;

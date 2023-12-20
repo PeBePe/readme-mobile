@@ -95,6 +95,8 @@ class Quote {
     String quote;
     int userId;
     String username;
+    int citedCount;
+    List<CitedUser> citedUsers;
 
     Quote({
         required this.id,
@@ -103,6 +105,8 @@ class Quote {
         required this.quote,
         required this.userId,
         required this.username,
+        required this.citedCount,
+        required this.citedUsers,
     });
 
     factory Quote.fromJson(Map<String, dynamic> json) => Quote(
@@ -112,6 +116,8 @@ class Quote {
         quote: json["quote"],
         userId: json["user_id"],
         username: json["username"],
+        citedCount: json["cited_count"],
+        citedUsers: List<CitedUser>.from(json["cited_users"].map((x) => CitedUser.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -119,6 +125,28 @@ class Quote {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "quote": quote,
+        "user_id": userId,
+        "username": username,
+        "cited_count": citedCount,
+        "cited_users": List<dynamic>.from(citedUsers.map((x) => x.toJson())),
+    };
+}
+
+class CitedUser {
+    int userId;
+    String username;
+
+    CitedUser({
+        required this.userId,
+        required this.username,
+    });
+
+    factory CitedUser.fromJson(Map<String, dynamic> json) => CitedUser(
+        userId: json["user_id"],
+        username: json["username"],
+    );
+
+    Map<String, dynamic> toJson() => {
         "user_id": userId,
         "username": username,
     };
